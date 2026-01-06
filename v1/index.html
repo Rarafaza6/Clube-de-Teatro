@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <link rel="icon" href="caras.png">
+
+    <script>
+       
+
+        if (screen.width < 640 || screen.height < 480) {
+            window.location.href = '/Movel';
+        }
+
+        // Chama a função de redirecionamento quando o documento estiver pronto
+        document.addEventListener('DOMContentLoaded', redirecionarPorLocalizacao);
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clube de Teatro</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        #banner {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: #d9cece;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            box-sizing: border-box;
+            z-index: 1000;
+            overflow: visible;
+        }
+
+        #logo {
+            width: 200px;
+            height: 90px;
+            background-image: url('teatro.png');
+            background-size: cover;
+            cursor: pointer;
+        }
+
+        #menu {
+            display: flex;
+        }
+
+        .menuItem {
+            margin: 0 10px;
+            padding: 10px;
+            color: #333;
+            text-decoration: none;
+            border: 1px solid #333;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.5s, color 0.3s;
+        }
+
+        .menuItem:hover {
+            background-color: #505050;
+            color: #fff;
+        }
+
+        #content {
+            margin-top: 100px;
+            padding: 170px;
+            background: url('fundo.png') center top no-repeat;
+            background-size: cover;
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            color: #fff;
+        }
+
+        #overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.3);
+            z-index: -1;
+        }
+
+        #clubText {
+            font-size: 3.5em;
+            margin-bottom: 10px;
+        }
+
+        #subText {
+            font-size: 1em;
+        }
+
+        .pieces-section {
+            margin-top: 50px;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+
+        .piece {
+            max-width: 300px;
+            margin: 20px;
+            text-align: center;
+        }
+
+        .piece img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+
+        .piece-title {
+            font-size: 1.5em;
+            margin-top: 10px;
+        }
+
+        .piece-synopsis {
+            font-size: 1em;
+            margin-top: 10px;
+        }
+
+        #titulopecas {
+            width: 100vw;
+            height: 25vh;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .menuItemEmCartaz {
+            margin: 0 10px;
+            padding: 10px;
+            color: #4f471f;
+            text-decoration: none;
+            border: 1px solid #1c1b19;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #f7ca44;
+            transition: background-color 0.5s, color 0.3s, border-color 0.3s;
+        }
+
+        .menuItemEmCartaz:hover {
+            background-color: #ffeaab;
+            color: #362b0b;
+            border-color: #ffc517;
+            border: 2px solid;
+        }
+
+        .rodape {
+            background-color: #333;
+            color: #fff;
+            padding: 65px;
+            text-align: center;
+            width: 100%;
+            position: relative;
+        }
+
+        .rodape img {
+            width: 60px;
+            height: auto;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="banner">
+        <div id="logo" onclick="window.location.href='index.html'"></div>
+        <div id="menu">
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSfzutsVwemh96pyEjzr5rRZK1sToBKhgz5D7gs1oZEnQQHU1Q/viewform?usp=dialog" class="menuItemEmCartaz">Junta-te ao Clube!</a>
+            <a href="cartaz.html" class="menuItem">Em Cartaz</a>
+            <a href="membros.html" class="menuItem">Membros</a>
+            <a href="contatos.html" class="menuItem">Contactos</a>
+        </div>
+    </div>
+
+    <div id="content">
+        <div id="overlay"></div>
+        <div id="clubText">Clube de Teatro</div>
+        <div id="subText">Clube de Teatro do<br> Agrupamento de Escolas da Cidadela</div>
+    </div>
+
+    <div id="titulopecas">
+        <h1>As nossas peças antigas:</h1>
+    </div>
+
+    <div class="pieces-section">
+        <div class="piece">
+            <a href="GanANSIAS.html">
+                <img src="peca4.png" alt="GanANSIAS - Poster">
+            </a>
+            <div class="piece-title">Ganânsias</div>
+            <div class="piece-synopsis">Uma comédia dramática que mostra até onde o ser humano está disposto a ir para alcançar os seus objetivos.</div>
+        </div>
+        <div class="piece">
+            <a href="abirradomorto.html">
+                <img src="peca1.jpg" alt="A Birra do Morto - Poster">
+            </a>
+            <div class="piece-title">A Birra do Morto</div>
+            <div class="piece-synopsis">Uma comédia hilariante onde um morto desafia a morte e interage com os vivos, provocando situações absurdamente engraçadas.</div>
+        </div>
+
+        <div class="piece">
+            <a href="arte.html">
+                <img src="peca2.jpg" alt="Arte - Poster">
+            </a>
+            <div class="piece-title">Arte</div>
+            <div class="piece-synopsis">Uma peça contemporânea sobre uma coisa não muito valorizada hoje em dia a <strong>ARTE.</strong></div>
+        </div>
+
+        <div class="piece">
+            <a href="pecaporpeca.html">
+                <img src="peca3.jpg" alt="Peça por Peça - Poster">
+            </a>
+            <div class="piece-title">Peça Por Peça</div>
+            <div class="piece-synopsis">O que pode correr mal antes da estreia de…</div>
+        </div>
+    </div>
+
+    <div class="rodape">
+        <p>&copy Clube de Teatro da Cidadela 2025 <br> Site desenvolvido por Rafael Diogo</p>
+        <div>
+            <a href="https://aecidadela.pt">
+                <img src="https://aecidadela.pt/wp-content/uploads/2019/06/logo-1.png" alt="Logo AECidadela">
+            </a>
+        </div>
+        <p>O Clube de Teatro faz parte do<br>Agrupamento de Escolas da Cidadela</p>
+    </div>
+</body>
+
+</html>

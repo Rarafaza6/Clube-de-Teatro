@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+
+    <link rel="icon" href="caras.png">
+
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Erro 404</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        #banner {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: #d9cece;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            box-sizing: border-box;
+            z-index: 1000;
+            overflow: visible;
+        }
+
+        #logo {
+            width: 200px;
+            height: 90px;
+            background-image: url('teatro.png');
+            background-size: cover;
+            cursor: pointer;
+        }
+
+        #menu {
+            display: flex;
+        }
+
+        .menuItem {
+            margin: 0 10px;
+            padding: 10px;
+            color: #333;
+            text-decoration: none;
+            border: 1px solid #333;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.5s, color 0.3s;
+        }
+
+        .menuItem:hover {
+            background-color: #505050;
+            color: #fff;
+        }
+
+        #content {
+            margin-top: 100px;
+            padding: 170px;
+            background: url('fundo.png') center top no-repeat;
+            background-size: cover;
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            color: #fff;
+        }
+
+        #overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.3);
+            z-index: -1;
+        }
+
+        #clubText {
+            font-size: 3.5em;
+            margin-bottom: 10px;
+        }
+
+        #subText {
+            font-size: 1em;
+        }
+
+        .pieces-section {
+            margin-top: 50px;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+
+        .piece {
+            max-width: 300px;
+            margin: 20px;
+            text-align: center;
+        }
+
+        .piece img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+
+        .piece-title {
+            font-size: 1.5em;
+            margin-top: 10px;
+        }
+
+        .piece-synopsis {
+            font-size: 1em;
+            margin-top: 10px;
+        }
+
+        #titulopecas{
+          width: 100vw;
+          height: 25vh;
+          display: flex;
+          flex-direction: row;
+          justify-content: center;
+          align-items: center;
+        }
+
+        /* Adicione estas regras ao seu estilo CSS existente */
+
+.menuItemEmCartaz {
+    margin: 0 10px;
+    padding: 10px;
+    color: #4f471f;
+    text-decoration: none;
+    border: 1px solid #1c1b19; /* Cor da borda amarelo claro */
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #f7ca44; /* Cor de fundo dourado */
+    transition: background-color 0.5s, color 0.3s, border-color 0.3s; /* Adiciona uma transição suave */
+}
+
+.menuItemEmCartaz:hover {
+    background-color: #ffeaab; /* Cor de fundo ao passar o mouse (cinza escuro) */
+    color: #362b0b; /* Cor do texto ao passar o mouse (dourado) */
+    border-color: #ffc517;
+    border:2px solid; /* Cor da borda ao passar o mouse (cinza escuro) */
+}
+
+.rodape {
+        background-color: #333;
+        color: #fff;
+        padding: 65px;
+        text-align: center;
+        width: 100%;
+        position: relative;
+}
+.rodape img {
+        width: 60px; /* Largura desejada da imagem */
+        height: auto; /* Mantém a proporção da imagem */
+        margin-top: 10px; /* Espaço entre o texto e a imagem */
+    }
+
+    </style>
+</head>
+
+
+<body>
+
+    <div id="banner">
+        <div id="logo" onclick="window.location.href='index.html'"></div>
+        <div id="menu">
+      </div>
+        <div id="menu">
+          <a href="https://docs.google.com/forms/d/e/1FAIpQLSfzutsVwemh96pyEjzr5rRZK1sToBKhgz5D7gs1oZEnQQHU1Q/viewform?usp=dialog" class="menuItemEmCartaz">Junta-te ao Clube!</a>
+            <a href="cartaz.html" class="menuItem">Em Cartaz</a>
+            <a href="membros.html" class="menuItem">Membros</a>
+            <a href="contatos.html" class="menuItem">Contactos</a>
+        </div>
+    </div>
+
+    <!-- Conteúdo da página aqui -->
+    <div id="content">
+        <!-- Sobreposição semi-transparente -->
+        <div id="overlay"></div>
+        <!-- Seu conteúdo vai aqui -->
+        <div id="clubText">Erro 404</div>
+        <div id="subText">Opss, parece que esta página foi parar aos bastidores!</div>
+
+        <!-- Seção de Peças de Teatro -->
+        
+
+            <!-- Adicione mais peças conforme necessário \  -->
+        </div>
+    </div>
+    <div id="titulopecas">
+    </div>
+    <div class="pieces-section">
+      
+    </div>
+
+    
+    
+  </body>
+
+</html>

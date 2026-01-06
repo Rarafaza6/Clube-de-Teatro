@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <!-- Google tag (gtag.js) -->
+    <link rel="icon" href="caras.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Membros - Clube de Teatro</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        #banner {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: #d9cece;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            box-sizing: border-box;
+            z-index: 1000;
+            overflow: visible;
+        }
+
+        #logo {
+            width: 200px;
+            height: 90px;
+            background-image: url('teatro.png');
+            background-size: cover;
+            cursor: pointer;
+        }
+
+        #menu {
+            display: flex;
+        }
+
+        .menuItem {
+            margin: 0 10px;
+            padding: 10px;
+            color: #333;
+            text-decoration: none;
+            border: 1px solid #333;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.5s, color 0.3s;
+        }
+
+        .menuItem:hover {
+            background-color: #505050;
+            color: #fff;
+        }
+
+        #content {
+            margin-top: 100px;
+            padding: 170px;
+            background: url('fundo.png') center top no-repeat;
+            background-size: cover;
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            color: #fff;
+        }
+
+        #overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.3);
+            z-index: -1;
+        }
+
+        #clubText {
+            font-size: 3.5em;
+            margin-bottom: 10px;
+        }
+
+        #subText {
+            font-size: 1em;
+        }
+
+        .pieces-section {
+            margin-top: 50px;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+
+        .piece {
+            max-width: 300px;
+            margin: 20px;
+            text-align: center;
+        }
+
+        .piece img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+
+        .piece-title {
+            font-size: 1.5em;
+            margin-top: 10px;
+        }
+
+        .piece-synopsis {
+            font-size: 1em;
+            margin-top: 10px;
+        }
+
+        #titulopecas{
+          width: 100vw;
+          height: 25vh;
+          display: flex;
+          flex-direction: row;
+          justify-content: center;
+          align-items: center;
+        }
+
+        /* Adicione estas regras ao seu estilo CSS existente */
+
+.menuItemEmCartaz {
+    margin: 0 10px;
+    padding: 10px;
+    color: #4f471f;
+    text-decoration: none;
+    border: 1px solid #1c1b19; /* Cor da borda amarelo claro */
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #f7ca44; /* Cor de fundo dourado */
+    transition: background-color 0.5s, color 0.3s, border-color 0.3s; /* Adiciona uma transição suave */
+}
+
+.menuItemEmCartaz:hover {
+    background-color: #ffeaab; /* Cor de fundo ao passar o mouse (cinza escuro) */
+    color: #362b0b; /* Cor do texto ao passar o mouse (dourado) */
+    border-color: #ffc517;
+    border:2px solid; /* Cor da borda ao passar o mouse (cinza escuro) */
+}
+
+
+.team-section {
+            margin-top: 50px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+
+        .person {
+            width: 250px;
+            height: 250px;
+            background-color: #007bff; /* Azul */
+            margin: 20px;
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            color: #fff;
+            border-radius: 25px;
+        }
+
+        .person-name {
+            font-size: 1.5em;
+            margin-bottom: 5px;
+        }
+
+        .person-bio {
+            font-size: 1em;
+            margin-bottom: 10px;
+        }
+
+        .learn-more-button {
+            padding: 10px;
+            background-color: #ffc107; /* Amarelo */
+            color: #333;
+            text-decoration: none;
+            border: 2px solid #b98c07; /* Amarelo */
+            border-radius: 5px;
+            transition: background-color 0.5s, color 0.3s;
+        }
+
+        .learn-more-button:hover {
+            background-color: #ffe28d;
+            color: #bb7300; /* Amarelo */
+        }
+
+        .aluno {
+            width: 250px;
+            height: 250px;
+            background-color: #aeadac;
+            margin: 20px;
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            color: #222020;
+            border-radius: 25px;
+        }
+
+        .aluno-name {
+            font-size: 1.5em;
+            margin-bottom: 5px;
+        }
+
+        .aluno-bio {
+            font-size: 1em;
+            margin-bottom: 10px;
+        }
+
+        .aluno-learn-more-button {
+            padding: 10px;
+            background-color: #424242; /* Amarelo */
+            color: #ffffff;
+            text-decoration: none;
+            border: 2px solid #000000; /* Amarelo */
+            border-radius: 5px;
+            transition: background-color 0.5s, color 0.3s;
+        }
+
+        .aluno-learn-more-button:hover {
+            background-color: #45a9fb;
+            color: #ffffff; /* Amarelo */
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="banner">
+        <div id="logo" onclick="window.location.href='index.html'"></div>
+        <div id="menu">
+      </div>
+        <div id="menu">
+          <a href="https://docs.google.com/forms/d/e/1FAIpQLSfzutsVwemh96pyEjzr5rRZK1sToBKhgz5D7gs1oZEnQQHU1Q/viewform?usp=dialog" class="menuItemEmCartaz">Junta-te ao Clube!</a>
+            <a href="cartaz.html" class="menuItem">Em Cartaz</a>
+            <a href="membros.html" class="menuItem">Membros</a>
+            <a href="contatos.html" class="menuItem">Contactos</a>
+        </div>
+    </div>
+
+    <!-- Conteúdo da página aqui -->
+    <div id="content">
+        <!-- Sobreposição semi-transparente -->
+        <div id="overlay"></div>
+        <!-- Seu conteúdo vai aqui -->
+        <div id="clubText">Membros</div>
+        <div id="subText">Quem <strong>FORAM</strong> os grandes Membros do Clube de Teatro?</div>
+
+        <!-- Seção de Peças de Teatro -->
+        
+
+            <!-- Adicione mais peças conforme necessário -->
+        </div>
+    </div>
+    <div class="team-section">
+        
+ <div class="aluno">
+            <div class="aluno-name">Melissa Figueiredo</div>
+            <div class="aluno-bio"><strong>Atriz</strong><br>No palco ela interpreta entre luz e emoção,
+                Elevando o teatro com pura inspiração.</div>
+            <a href="melissa.html" class="aluno-learn-more-button">Saber Mais</a>
+        </div>
+
+        <div class="aluno">
+            <div class="aluno-name">Mila Loureiro</div>
+            <div class="aluno-bio"><strong>Artiz</strong><br>Sua presença ilumina cada cena com fervor,
+                Fazendo do teatro um palco de puro amor.</div>
+            <a href="mila.html" class="aluno-learn-more-button">Saber Mais</a>
+        </div>
+        <!-- Pessoa 2 -->
+       <div class="aluno">
+            <div class="aluno-name">Jorge Figueira</div>
+            <div class="aluno-bio"><strong>Ator e Operador de Som Assistente</strong><br>Com destreza e muito humor, este ator é hábil e transformador.</div>
+            <a href="jorge.html" class="aluno-learn-more-button">Saber Mais</a>
+        </div>
+        
+        <div class="aluno">
+            <div class="aluno-name">Yasmin Formosinho</div>
+            <div class="aluno-bio"><strong>Atriz</strong></div>
+            <div class="aluno-bio">No Clube de Teatro, tem a mais duradoura das trajetórias, portanto, o que não falta, são memórias.</div>
+            <a href="yasmin.html" class="aluno-learn-more-button">Saber Mais</a>
+        </div>
+        
+        
+        
+        <div class="aluno">
+            <div class="aluno-name">Inês Oliveira</div>
+            <div class="aluno-bio"><strong>Atriz</strong><br>Esta atriz tem muita habilidade, junto das amigas não há quem as separe.</div>
+            <a href="ines.html" class="aluno-learn-more-button">Saber Mais</a>
+        </div>
+        
+        <div class="aluno">
+            <div class="aluno-name">Madalena Nascimento</div>
+            <div class="aluno-bio"><strong>Atriz</strong><br>Com vários papéis feitos, ela atua sem defeitos.</div>
+            <a href="madalena.html" class="aluno-learn-more-button">Saber Mais</a>
+        </div>
+        
+        <div class="aluno">
+            <div class="aluno-name">Mariana Santos</div>
+            <div class="aluno-bio"><strong>Atriz</strong><br>Em cena, ela reina, com o seu brilho singular,
+                uma atriz excecional, pronta para deslumbrar!</div>
+            <a href="mariana.html" class="aluno-learn-more-button">Saber Mais</a>
+        </div>
+        
+        <div class="aluno">
+            <div class="aluno-name">André Gonçalves</div>
+            <div class="aluno-bio"><strong>Ator</strong><br>Se acham que em cena ele sabe encantar, isso é porque nunca o ouviram cantar.</div>
+            <a href="andre.html" class="aluno-learn-more-button">Saber Mais</a>
+        </div>
+        
+        <div class="aluno">
+            <div class="aluno-name">Camile Hasse</div>
+            <div class="aluno-bio"><strong>Atriz</strong><br>Ela tem delicadeza a atuar, com a sua doçura, o público ela conseguiu conquistar.</div>
+            <a href="camile.html" class="aluno-learn-more-button">Saber Mais</a>
+        </div>
+        
+        <div class="aluno">
+            <div class="aluno-name">Leo Bacellar</div>
+            <div class="aluno-bio"><strong>Ator</strong><br>Este ator brilha à frente do pano, toda a gente lembra-se quando fez de Jamaicano!</div>
+        </div>
+         <div class="aluno">
+            <div class="aluno-name">Gonçalo Capitão</div>
+            <div class="aluno-bio"><strong>Ator</strong><br>Ele é novo no palco, um ator em ascensão, graças a ele o Clube de Teatro ganhará uma nova emoção.</div>
+            <a href="gonçalo.html" class="aluno-learn-more-button">Saber Mais</a>
+        </div>
+  </body>
+
+</html>

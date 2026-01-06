@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <!-- Google tag (gtag.js) -->
+    <link rel="icon" href="caras.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Membros - Clube de Teatro</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        #banner {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: #d9cece;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            box-sizing: border-box;
+            z-index: 1000;
+            overflow: visible;
+        }
+
+        #logo {
+            width: 200px;
+            height: 90px;
+            background-image: url('teatro.png');
+            background-size: cover;
+            cursor: pointer;
+        }
+
+        #menu {
+            display: flex;
+        }
+
+        .menuItem {
+            margin: 0 10px;
+            padding: 10px;
+            color: #333;
+            text-decoration: none;
+            border: 1px solid #333;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.5s, color 0.3s;
+        }
+
+        .menuItem:hover {
+            background-color: #505050;
+            color: #fff;
+        }
+
+        #content {
+            margin-top: 100px;
+            padding: 170px;
+            background: url('fundo.png') center top no-repeat;
+            background-size: cover;
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            color: #fff;
+        }
+
+        #overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.3);
+            z-index: -1;
+        }
+
+        #clubText {
+            font-size: 3.5em;
+            margin-bottom: 10px;
+        }
+
+        #subText {
+            font-size: 1em;
+        }
+
+        .pieces-section {
+            margin-top: 50px;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+
+        .piece {
+            max-width: 300px;
+            margin: 20px;
+            text-align: center;
+        }
+
+        .piece img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+
+        .piece-title {
+            font-size: 1.5em;
+            margin-top: 10px;
+        }
+
+        .piece-synopsis {
+            font-size: 1em;
+            margin-top: 10px;
+        }
+
+        #titulopecas{
+          width: 100vw;
+          height: 25vh;
+          display: flex;
+          flex-direction: row;
+          justify-content: center;
+          align-items: center;
+        }
+
+        /* Adicione estas regras ao seu estilo CSS existente */
+
+.menuItemEmCartaz {
+    margin: 0 10px;
+    padding: 10px;
+    color: #4f471f;
+    text-decoration: none;
+    border: 1px solid #1c1b19; /* Cor da borda amarelo claro */
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #f7ca44; /* Cor de fundo dourado */
+    transition: background-color 0.5s, color 0.3s, border-color 0.3s; /* Adiciona uma transição suave */
+}
+
+.menuItemEmCartaz:hover {
+    background-color: #ffeaab; /* Cor de fundo ao passar o mouse (cinza escuro) */
+    color: #362b0b; /* Cor do texto ao passar o mouse (dourado) */
+    border-color: #ffc517;
+    border:2px solid; /* Cor da borda ao passar o mouse (cinza escuro) */
+}
+
+
+.team-section {
+            margin-top: 50px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+
+        .person {
+            width: 250px;
+            height: 250px;
+            background-color: #007bff; /* Azul */
+            margin: 20px;
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            color: #fff;
+            border-radius: 25px;
+        }
+
+        .person-name {
+            font-size: 1.5em;
+            margin-bottom: 5px;
+        }
+
+        .person-bio {
+            font-size: 1em;
+            margin-bottom: 10px;
+        }
+
+        .learn-more-button {
+            padding: 10px;
+            background-color: #ffc107; /* Amarelo */
+            color: #333;
+            text-decoration: none;
+            border: 2px solid #b98c07; /* Amarelo */
+            border-radius: 5px;
+            transition: background-color 0.5s, color 0.3s;
+        }
+
+        .learn-more-button:hover {
+            background-color: #ffe28d;
+            color: #bb7300; /* Amarelo */
+        }
+
+        .aluno {
+            width: 250px;
+            height: 250px;
+            background-color: #ffc21c;
+            margin: 20px;
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            color: #222020;
+            border-radius: 25px;
+        }
+
+        .aluno-name {
+            font-size: 1.5em;
+            margin-bottom: 5px;
+        }
+
+        .aluno-bio {
+            font-size: 1em;
+            margin-bottom: 10px;
+        }
+
+        .aluno-learn-more-button {
+            padding: 10px;
+            background-color: #0793ff; /* Amarelo */
+            color: #333;
+            text-decoration: none;
+            border: 2px solid #0679d0; /* Amarelo */
+            border-radius: 5px;
+            transition: background-color 0.5s, color 0.3s;
+        }
+
+        .aluno-learn-more-button:hover {
+            background-color: #45a9fb;
+            color: #ffffff; /* Amarelo */
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="banner">
+        <div id="logo" onclick="window.location.href='index.html'"></div>
+        <div id="menu">
+      </div>
+        <div id="menu"><a href="https://docs.google.com/forms/d/e/1FAIpQLSfzutsVwemh96pyEjzr5rRZK1sToBKhgz5D7gs1oZEnQQHU1Q/viewform?usp=dialog" class="menuItemEmCartaz">Junta-te ao Clube!</a>
+            <a href="cartaz.html" class="menuItem">Em Cartaz</a>
+            <a href="membros.html" class="menuItem">Membros</a>
+            <a href="contatos.html" class="menuItem">Contactos</a>
+        </div>
+    </div>
+
+    <!-- Conteúdo da página aqui -->
+    <div id="content">
+        <!-- Sobreposição semi-transparente -->
+        <div id="overlay"></div>
+        <!-- Seu conteúdo vai aqui -->
+        <div id="clubText">Membros</div>
+        <div id="subText">Quem são os <strong>GRANDES</strong> Membros do Clube de Teatro?</div>
+
+        <!-- Seção de Peças de Teatro -->
+        
+
+            <!-- Adicione mais peças conforme necessário -->
+        </div>
+    </div>
+    <div class="team-section">
+        
+
+        <!-- Pessoa 2 -->
+        <div class="person">
+            <div class="person-name">Sónia Silva</div>
+            <div class="person-bio"><strong>Encenadora</strong></div>
+            <div class="person-bio">Deste Clube de Teatro, é a fundadora, mas também, a nossa musa inspiradora.</div>
+            <a href="sonia.html" class="learn-more-button">Saber Mais</a>
+        </div>
+        
+        <div class="person">
+            <div class="person-name">Isabel Fernandes</div>
+            <div class="person-bio"><strong>Encenadora</strong></div>
+            <div class="person-bio">Atrás das cortinas, mas na linha da frente nas encenações, e foi assim que ela entrou nos nossos corações.</div>
+            <a href="isabel.html" class="learn-more-button">Saber Mais</a>
+        </div>
+        
+
+        
+        <div class="aluno">
+            <div class="aluno-name">Xavier Silva</div>
+            <div class="aluno-bio"><strong>Ator</strong></div>
+            <div class="aluno-bio">Mestre na arte de replicar, este ator está sempre a brilhar.</div>
+            <a href="xavier.html" class="aluno-learn-more-button">Saber Mais</a>
+        </div>
+        
+        
+        
+        
+        
+        <div class="aluno">
+            <div class="aluno-name">Rafael Diogo</div>
+            <div class="aluno-bio"><strong>Operador de Som e Ator</strong><br>Se ele é maravilhoso a tratar do som, em programação ele é muito bom.</div>
+            <a href="rafaeldiogo.html" class="aluno-learn-more-button">Saber Mais</a>
+        </div>
+        
+      
+
+        <div class="aluno">
+            <div class="aluno-name">Ana Azevedo</div>
+            <div class="aluno-bio"><strong>Atriz</strong><br>Com graça e talento, ela faz o palco vibrar,
+                Cada gesto seu nos convida a sonhar.</div>
+            <a href="ana.html" class="aluno-learn-more-button">Saber Mais</a>
+        </div>
+
+        <div class="aluno">
+            <div class="aluno-name">Ana Fernández</div>
+            <div class="aluno-bio"><strong>Atriz</strong><br>Com magia e charme, a cena se transforma,
+                Sua atuação é arte que o coração conforma.</div>
+            <a href="cecilia.html" class="aluno-learn-more-button">Saber Mais</a>
+        </div>
+
+       
+
+
+  </body>
+
+</html>

@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+
+<link rel="icon" href="caras.png">
+
+<head>
+    <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-0M08RKBNTG"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-0M08RKBNTG');
+</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contactos</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        #banner {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: #d9cece;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            box-sizing: border-box;
+            z-index: 1000;
+            overflow: visible;
+        }
+
+        #logo {
+            width: 200px;
+            height: 90px;
+            background-image: url('teatro.png');
+            background-size: cover;
+            cursor: pointer;
+        }
+
+        #menu {
+            display: flex;
+        }
+
+        .menuItem {
+            margin: 0 10px;
+            padding: 10px;
+            color: #333;
+            text-decoration: none;
+            border: 1px solid #333;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.5s, color 0.3s;
+        }
+
+        .menuItem:hover {
+            background-color: #505050;
+            color: #fff;
+        }
+
+        #content {
+            margin-top: 100px;
+            padding: 170px;
+            background: url('fundo.png') center top no-repeat;
+            background-size: cover;
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            color: #fff;
+        }
+
+        #overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.3);
+            z-index: -1;
+        }
+
+        #clubText {
+            font-size: 3.5em;
+            margin-bottom: 10px;
+        }
+
+        #subText {
+            font-size: 1em;
+        }
+
+        .pieces-section {
+            margin-top: 50px;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+
+        .piece {
+            max-width: 300px;
+            margin: 20px;
+            text-align: center;
+        }
+
+        .piece img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+
+        .piece-title {
+            font-size: 1.5em;
+            margin-top: 10px;
+        }
+
+        .piece-synopsis {
+            font-size: 1em;
+            margin-top: 10px;
+        }
+        #titulopecas {
+    width: 90vw;
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+    background: linear-gradient(135deg, #ffffff, #f0f0f0);
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    position: relative;
+    overflow: hidden;
+    animation: slideIn 1s ease-out;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+@keyframes slideIn {
+    0% {
+        transform: translateY(50px);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+#titulopecas:hover {
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+    transform: translateY(-3px);
+}
+
+#titulopecas h2 {
+    font-size: 1.5em;
+    color: #333;
+    line-height: 1.6;
+    margin: 0;
+}
+
+#titulopecas h2 a {
+    color: #007BFF;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+#titulopecas h2 a:hover {
+    color: #0056b3;
+    transform: scale(1.05);
+}
+
+#titulopecas iframe {
+    width: 100%;
+    max-width: 700px;
+    height: 600px;
+    border-radius: 8px;
+    border: none;
+    transition: transform 0.3s ease;
+}
+
+#titulopecas iframe:hover {
+    transform: scale(1.02);
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    #titulopecas {
+        width: 95vw;
+        padding: 15px;
+    }
+    #titulopecas h2 {
+        font-size: 1.3em;
+    }
+    #titulopecas iframe {
+        height: 500px;
+    }
+}
+
+
+
+        /* Adicione estas regras ao seu estilo CSS existente */
+
+.menuItemEmCartaz {
+    margin: 0 10px;
+    padding: 10px;
+    color: #4f471f;
+    text-decoration: none;
+    border: 1px solid #1c1b19; /* Cor da borda amarelo claro */
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #f7ca44; /* Cor de fundo dourado */
+    transition: background-color 0.5s, color 0.3s, border-color 0.3s; /* Adiciona uma transição suave */
+}
+
+.menuItemEmCartaz:hover {
+    background-color: #ffeaab; /* Cor de fundo ao passar o mouse (cinza escuro) */
+    color: #362b0b; /* Cor do texto ao passar o mouse (dourado) */
+    border-color: #ffc517;
+    border:2px solid; /* Cor da borda ao passar o mouse (cinza escuro) */
+}
+
+    </style>
+</head>
+
+<body>
+
+    <div id="banner">
+        <div id="logo" onclick="window.location.href='index.html'"></div>
+        <div id="menu">
+      </div>
+        <div id="menu">
+          <a href="https://docs.google.com/forms/d/e/1FAIpQLSfzutsVwemh96pyEjzr5rRZK1sToBKhgz5D7gs1oZEnQQHU1Q/viewform?usp=dialog" class="menuItemEmCartaz">Junta-te ao Clube!</a>
+            <a href="cartaz.html" class="menuItem">Em Cartaz</a>
+            <a href="membros.html" class="menuItem">Membros</a>
+            <a href="contatos.html" class="menuItem">Contactos</a>
+        </div>
+    </div>
+
+    <!-- Conteúdo da página aqui -->
+    <div id="content">
+        <!-- Sobreposição semi-transparente -->
+        <div id="overlay"></div>
+        <!-- Seu conteúdo vai aqui -->
+        <div id="clubText">Contactos</div>
+        <div id="subText">Fala com os <strong>GRANDES</strong> membros do Clube de Teatro!</div>
+
+        <!-- Seção de Peças de Teatro -->
+        
+
+            <!-- Adicione mais peças conforme necessário -->
+        </div>
+    </div>
+    <div id="titulopecas">
+        <h2>
+          <br><br>
+          Email:<br>
+          <a href="mailto:contacto-clube-de-teatro@googlegroups.com">
+            contacto-clube-de-teatro@googlegroups.com
+          </a>
+          <br><br>
+          Presencialmente:<br>
+          14:30 até 16:30 no Auditório da Cidadela
+        </h2>
+        <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSdKMhULECOu92UbNHN0JBySYg1o2IqjkOQe8SaVvhhNykjCMg/viewform?embedded=true" frameborder="0" marginheight="0" marginwidth="0">
+          A carregar…
+        </iframe>
+      </div>
+      
+  </body>
+
+</html>

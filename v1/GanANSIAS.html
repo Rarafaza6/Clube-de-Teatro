@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <link rel="icon" href="caras.png">
+<head>
+    <!-- Google tag (gtag.js) -->
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Peça por peça</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        #banner {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: #d9cece;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            box-sizing: border-box;
+            z-index: 1000;
+            overflow: visible;
+        }
+
+        #logo {
+            width: 200px;
+            height: 90px;
+            background-image: url('teatro.png');
+            background-size: cover;
+            cursor: pointer;
+        }
+
+        #menu {
+            display: flex;
+        }
+
+        .menuItem {
+            margin: 0 10px;
+            padding: 10px;
+            color: #333;
+            text-decoration: none;
+            border: 1px solid #333;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.5s, color 0.3s;
+        }
+
+        .menuItem:hover {
+            background-color: #505050;
+            color: #fff;
+        }
+
+        #content {
+            margin-top: 100px;
+            padding: 20px;
+            background: url('fundo.png') center top no-repeat;
+            background-size: cover;
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            color: #fff;
+        }
+
+        #overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.3);
+            z-index: -1;
+        }
+
+        .profile-section {
+            margin-top: 50px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: left;
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+
+        .profile-section h3 {
+            color: #333;
+        }
+
+        .profile-section p {
+            color: #666;
+        }
+
+        /* Adicione estas regras para redimensionar a imagem */
+        .profile-section img {
+            max-width: 300px; /* Largura máxima da imagem */
+            height: auto; /* Altura automática para manter a proporção */
+        }
+
+        .menuItemEmCartaz {
+            margin: 0 10px;
+            padding: 10px;
+            color: #4f471f;
+            text-decoration: none;
+            border: 1px solid #1c1b19; /* Cor da borda amarelo claro */
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #f7ca44; /* Cor de fundo dourado */
+            transition: background-color 0.5s, color 0.3s, border-color 0.3s; /* Adiciona uma transição suave */
+        }
+
+        .menuItemEmCartaz:hover {
+            background-color: #ffeaab; /* Cor de fundo ao passar o mouse (cinza escuro) */
+            color: #362b0b; /* Cor do texto ao passar o mouse (dourado) */
+            border-color: #ffc517;
+            border: 2px solid; /* Cor da borda ao passar o mouse (cinza escuro) */
+        }
+
+        /* Estilizando o acordeão */
+        details {
+            color: #000; /* Letra em preto */
+            background-color: #fff; /* Fundo branco */
+            border: 1px solid #000; /* Borda preta */
+            border-radius: 5px; /* Cantos arredondados */
+            padding: 10px; /* Espaçamento interno */
+            margin-bottom: 15px; /* Margem inferior */
+        }
+
+        summary {
+            cursor: pointer; /* Cursor indicativo de interatividade */
+        }
+
+        details[open] {
+            background-color: #f0f0f0; /* Fundo cinza claro quando aberto */
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="banner">
+        <div id="logo" onclick="window.location.href='index.html'"></div>
+        <div id="menu">
+        </div>
+        <div id="menu">
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSfzutsVwemh96pyEjzr5rRZK1sToBKhgz5D7gs1oZEnQQHU1Q/viewform?usp=dialog" class="menuItemEmCartaz">Junta-te ao Clube!</a>
+            <a href="cartaz.html" class="menuItem">Em Cartaz</a>
+            <a href="membros.html" class="menuItem">Membros</a>
+            <a href="contatos.html" class="menuItem">Contatos</a>
+        </div>
+    </div>
+
+    <div id="content">
+        <div id="overlay"></div>
+        <div class="profile-section">
+            <img src="peca4.png" alt="GanÂNSIAS- Poster">
+            <h3>Ganânsias</h3>
+            <p>Na misteriosa mata de Roquelanes, no coração do antigo Reino das Astúrias, três irmãos — Zé Maria, Santiago e Martim Villaverde — tropeçam por acaso num tesouro perdido que pode devolver-lhes o luxo de outrora. Outrora milionários e agora reduzidos a mendigar migalhas depois de esbanjarem a fortuna herdada do pai, os irmãos vêem no achado uma oportunidade de redenção... ou talvez de destruição.
+
+Entre gargalhadas e tensões, alianças traiçoeiras e monólogos absurdos, Ganânsias explora até onde o ser humano está disposto a ir por ambição. Uma comédia dramática onde o ouro brilha, mas o ego brilha mais — e onde cada piada esconde um espelho da condição humana.</p>
+            <details>
+                <summary>Ficha Técnica</summary>
+                <ul>
+                    <p><strong><br>Equipa Técnica</strong></p>
+                    <li style="color: black;">Sónia Silva - Encenação</li>
+                    <li style="color: black;">Isabel Fernandes - Encenação</li>
+                    <li style="color: black;">Jorge Figueira- Operador de Som Assistente</li>
+                    <li style="color: black;">Rafael Diogo - Operador de Som</li>
+                    <li style="color: black;">Gonçalo Capitão - Operador de Som</li>
+                    <li style="color: black;">Mila Loureiro - Cenógrafa</li>
+                    <p><strong><br>Elenco</strong></p>
+                    <li style="color: black;">Ana Cecília Fernández - Jacinta, a empregada</li>
+                    <li style="color: black;">Ana Clara Azevedo - Narrador</li>
+                    <li style="color: black;">Gonçalo Capitão - Hipólito, Ajudante do Sr.° Narciso</li>
+                    <li style="color: black;">Jorge Figueira- Santiago Villaverde</li>
+                    <li style="color: black;">Melissa Figueiredo- Juanita, a burra</li>
+                    <li style="color: black;">Mila Loureiro- Mendigo e Sr.º Narciso (Droguista)</li>
+                    <li style="color: black;">Rafael Diogo- Martim Villaverde</li>
+                    <li style="color: black;">Xavier Silva- Zé Maria Villaverde</li>
+                </ul>
+            </details>
+        </div>
+    </div>
+</body>
+
+</html>
