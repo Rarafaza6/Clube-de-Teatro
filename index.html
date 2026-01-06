@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Clube de Teatro do Agrupamento de Escolas da Cidadela - Peças, membros e muito mais!">
+    <title>Clube de Teatro</title>
+    <link rel="icon" href="caras.png">
+    <link rel="stylesheet" href="styles.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@300;400;600;700;800&display=swap"
+        rel="stylesheet">
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="firebase-config.js"></script>
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <a href="index.html" class="header__logo">
+            <img src="teatro.png" alt="Clube de Teatro Logo">
+        </a>
+
+        <!-- Menu Hambúrguer Mobile -->
+        <button class="nav__toggle" aria-label="Menu" onclick="toggleMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+        <!-- Navegação -->
+        <nav class="nav" id="nav">
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSfzutsVwemh96pyEjzr5rRZK1sToBKhgz5D7gs1oZEnQQHU1Q/viewform?usp=dialog"
+                class="nav__link nav__link--highlight">Junta-te ao Clube!</a>
+            <a href="cartaz.html" class="nav__link">Em Cartaz</a>
+            <a href="membros.html" class="nav__link">Membros</a>
+            <a href="contatos.html" class="nav__link">Contactos</a>
+        </nav>
+    </header>
+
+    <!-- Overlay para menu mobile -->
+    <div class="nav-overlay" id="navOverlay" onclick="toggleMenu()"></div>
+
+    <!-- Hero Section -->
+    <section class="hero" style="background-image: url('fundo.png');">
+        <div class="hero__content">
+            <h1 class="hero__title">Clube de Teatro</h1>
+            <p class="hero__subtitle" id="school-name-hero">Agrupamento de Escolas da Cidadela</p>
+        </div>
+    </section>
+
+    <!-- Seção de Peças -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section__title">As nossas peças</h2>
+
+            <div class="cards-grid" id="pecas-grid">
+                <!-- As peças serão carregadas dinamicamente aqui -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; <span id="club-name-footer">Clube de Teatro da Cidadela</span> <span
+                class="copyright-year">2025</span></p>
+        <p class="footer__text">Site desenvolvido por Rafael Diogo</p>
+        <a href="https://aecidadela.pt">
+            <img src="https://aecidadela.pt/wp-content/uploads/2019/06/logo-1.png" alt="Logo AECidadela"
+                class="footer__logo">
+        </a>
+        <p class="footer__text">O Clube de Teatro faz parte do<br><span id="school-name-footer">Agrupamento de Escolas
+                da Cidadela</span></p>
+    </footer>
+
+    <script src="site-loader.js"></script>
+
+    <!-- JavaScript para menu mobile -->
+    <script>
+        function toggleMenu() {
+            const nav = document.getElementById('nav');
+            const overlay = document.getElementById('navOverlay');
+            nav.classList.toggle('active');
+            overlay.classList.toggle('active');
+            document.body.style.overflow = nav.classList.contains('active') ? 'hidden' : '';
+        }
+
+        // Fechar menu ao clicar num link
+        document.querySelectorAll('.nav__link').forEach(link => {
+            link.addEventListener('click', () => {
+                const nav = document.getElementById('nav');
+                if (nav.classList.contains('active')) {
+                    toggleMenu();
+                }
+            });
+        });
+
+        // Fechar menu com ESC
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                const nav = document.getElementById('nav');
+                if (nav.classList.contains('active')) {
+                    toggleMenu();
+                }
+            }
+        });
+
+        // Copyright dinâmico
+        document.addEventListener('DOMContentLoaded', () => {
+            const year = new Date().getFullYear();
+            const copyright = document.querySelector('.footer p');
+            if (copyright) {
+                copyright.innerHTML = copyright.innerHTML.replace(/\d{4}/, year);
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Admin - Clube de Teatro</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="icon" href="caras.png">
+    <!-- Styles -->
+    <link rel="stylesheet" href="admin-styles.css">
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
+    <script src="firebase-config.js"></script>
+</head>
+
+<body>
+
+    <!-- ============================================ -->
+    <!-- AUTH SCREEN -->
+    <!-- ============================================ -->
+    <div id="loginSection" class="auth-container">
+        <div class="auth-box">
+            <h1 class="auth-title">Painel de Controlo</h1>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" id="email" class="form-input" required placeholder="admin@escola.pt">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Palavra-passe</label>
+                    <input type="password" id="password" class="form-input" required placeholder="••••••••">
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Entrar</button>
+                <div style="text-align: center; margin-top: 15px;">
+                    <a href="#" onclick="handleForgotPassword(event)"
+                        style="font-size: 0.85rem; color: var(--color-primary); text-decoration: none;">Esqueci-me da
+                        palavra-passe</a>
+                </div>
+                <p id="loginError"
+                    style="color: var(--color-error); margin-top: 10px; font-size: 0.9rem; text-align: center;"></p>
+            </form>
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- APP DASHBOARD -->
+    <!-- ============================================ -->
+    <div id="adminDashboard" class="app-layout" style="display: none;">
+
+        <!-- SIDEBAR -->
+        <aside class="app-sidebar">
+            <div class="sidebar-header">
+                <span class="brand-title">🎭 Painel de Admin</span>
+            </div>
+
+            <nav class="sidebar-nav">
+                <button class="nav-item active" data-section="dashboard">
+                    📊 Dashboard
+                </button>
+                <button class="nav-item" data-section="pecas">
+                    🎬 Peças
+                </button>
+                <button class="nav-item" data-section="membros">
+                    👥 Membros
+                </button>
+                <button class="nav-item" data-section="config">
+                    ⚙️ Configurações
+                </button>
+            </nav>
+
+            <div class="sidebar-footer">
+                <button onclick="logout()" class="nav-item" style="color: #fda4af;">
+                    🚪 Terminar Sessão
+                </button>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="app-main">
+            <!-- Top Bar -->
+            <div class="top-bar">
+                <h2 class="page-title" id="pageTitleDisplay">Dashboard</h2>
+                <div class="user-profile">
+                    <span id="userEmail">admin@user.com</span>
+                    <div class="btn-icon" style="background:#e2e8f0;">👤</div>
+                </div>
+            </div>
+
+            <!-- Scrollable Area -->
+            <div class="content-scroll-area">
+
+                <!-- SECTION: DASHBOARD -->
+                <section id="dashboardSection" class="admin-section">
+                    <div
+                        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; margin-bottom: 32px;">
+                        <div class="stat-widget">
+                            <div class="stat-icon">🎭</div>
+                            <div>
+                                <div class="stat-value" id="totalPecas">-</div>
+                                <div class="stat-label">Peças Totais</div>
+                            </div>
+                        </div>
+                        <div class="stat-widget">
+                            <div class="stat-icon">👥</div>
+                            <div>
+                                <div class="stat-value" id="totalMembros">-</div>
+                                <div class="stat-label">Membros</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card" id="liveStatusWidget">
+                        <h3 style="margin-bottom: 10px;">Estado do Site</h3>
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <span id="statusLabel" style="font-weight: 700; font-size: 1.1rem;">Verificando...</span>
+                        </div>
+                        <p id="statusDescription" style="color: var(--color-text-muted); margin-top: 5px;"></p>
+                    </div>
+                </section>
+
+                <!-- SECTION: PEÇAS -->
+                <section id="pecasSection" class="admin-section" style="display: none;">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                        <h3>Gestão de Peças</h3>
+                        <button onclick="showAddPecaForm()" class="btn btn-primary">+ Nova Peça</button>
+                    </div>
+                    <div id="pecasList" class="data-grid">
+                        <!-- Peças injetadas via JS -->
+                    </div>
+                </section>
+
+                <!-- SECTION: MEMBROS -->
+                <section id="membrosSection" class="admin-section" style="display: none;">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                        <h3>Equipa & Elenco</h3>
+                        <button onclick="showAddMembroForm()" class="btn btn-primary">+ Novo Membro</button>
+                    </div>
+                    <div id="membrosList" class="data-grid">
+                        <!-- Membros injetados via JS -->
+                    </div>
+                </section>
+
+                <!-- SECTION: CONFIG -->
+                <section id="configSection" class="admin-section" style="display: none;">
+                    <div style="display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; align-items: start;">
+                        <!-- Site Settings -->
+                        <div class="card">
+                            <h3 style="margin-bottom: 24px;">Configurações Gerais</h3>
+                            <form id="configForm">
+                                <div class="form-group">
+                                    <label class="form-label">Nome do Clube</label>
+                                    <input type="text" id="configNomeClube" class="form-input">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Nome da Escola</label>
+                                    <input type="text" id="configEscola" class="form-input">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Email de Contacto</label>
+                                    <input type="email" id="configEmail" class="form-input">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Horário</label>
+                                    <input type="text" id="configHorario" class="form-input">
+                                </div>
+                                <div style="text-align: right;">
+                                    <button type="submit" class="btn btn-primary">Guardar Alterações</button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- Admin Management -->
+                        <div class="card">
+                            <div
+                                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                                <h3>Gestão de Administradores</h3>
+                                <button onclick="showAddAdminForm()" class="btn btn-outline btn-sm">+ Novo
+                                    Admin</button>
+                            </div>
+                            <p style="font-size: 0.85rem; color: var(--color-text-muted); margin-bottom: 20px;">
+                                Apenas os emails nesta lista podem aceder a este painel.
+                            </p>
+                            <div id="adminsList" style="display: flex; flex-direction: column; gap: 12px;">
+                                <!-- Admins injected via JS -->
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- MODALS -->
+    <!-- ============================================ -->
+
+    <!-- Modal Peça -->
+    <div id="pecaForm" class="modal-overlay">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3 id="pecaFormTitle">Nova Peça</h3>
+                <button onclick="closePecaForm()" class="btn-icon"
+                    style="border:none; background:none; font-size:1.2rem;">✕</button>
+            </div>
+            <div class="modal-body">
+                <form id="pecaFormElement">
+                    <input type="hidden" id="pecaId">
+
+                    <div class="form-group">
+                        <label class="form-label">Nome da Peça</label>
+                        <input type="text" id="pecaNome" class="form-input" required>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div class="form-group">
+                            <label class="form-label">Autor</label>
+                            <input type="text" id="pecaAutor" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Ano</label>
+                            <input type="number" id="pecaAno" class="form-input" value="2025">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Sinopse</label>
+                        <textarea id="pecaSinopse" class="form-textarea" rows="4"></textarea>
+                    </div>
+
+                    <div class="card" style="background:var(--color-bg); border:none;">
+                        <label class="form-label">Cartaz / Imagem</label>
+                        <div id="dropZonePeca"
+                            style="border: 2px dashed var(--color-border); padding: 20px; text-align: center; border-radius: 8px;">
+                            <p id="dropText" style="color: var(--color-text-muted); font-size: 0.9rem;">Arrasta uma
+                                imagem ou clica para selecionar</p>
+                            <input type="file" id="pecaImagemFile" accept="image/*" style="display: none;">
+                            <input type="hidden" id="pecaImagem">
+                            <button type="button" onclick="document.getElementById('pecaImagemFile').click()"
+                                class="btn btn-outline" style="margin-top: 10px;">Selecionar Ficheiro</button>
+                            <p id="uploadProgress"
+                                style="display: none; color: var(--color-primary); font-size: 0.8rem; margin-top: 5px;">
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" style="display: flex; align-items: center; gap: 10px;">
+                            <input type="checkbox" id="pecaEmCartaz">
+                            <span>Definir como "Em Cartaz" (Destaque Principal)</span>
+                        </label>
+                    </div>
+
+                    <!-- Participações Section -->
+                    <div id="participacoesSection"
+                        style="display: none; margin-top: 30px; border-top: 1px solid var(--color-border); padding-top: 20px;">
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                            <h4>Elenco & Equipa</h4>
+                            <button type="button" onclick="showAddParticipacaoForm()" class="btn btn-outline btn-sm">+
+                                Adicionar</button>
+                        </div>
+                        <div id="participacoesList">
+                            <!-- Injected JS -->
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" onclick="closePecaForm()" class="btn btn-outline">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Guardar Peça</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Membro -->
+    <div id="membroForm" class="modal-overlay">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3 id="membroFormTitle">Novo Membro</h3>
+                <button onclick="closeMembroForm()" class="btn-icon"
+                    style="border:none; background:none; font-size:1.2rem;">✕</button>
+            </div>
+            <div class="modal-body">
+                <form id="membroFormElement">
+                    <input type="hidden" id="membroId">
+
+                    <div class="form-group">
+                        <label class="form-label">Nome Completo</label>
+                        <input type="text" id="membroNome" class="form-input" required>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div class="form-group">
+                            <label class="form-label">Tipo</label>
+                            <select id="membroTipo" class="form-select">
+                                <option value="aluno">Aluno</option>
+                                <option value="professor">Professor / Encenador</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Função Principal</label>
+                            <input type="text" id="membroFuncao" class="form-input"
+                                placeholder="Ex: Ator, Luminotécnico">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Mini Biografia</label>
+                        <textarea id="membroBio" class="form-textarea" rows="3"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">
+                            <input type="checkbox" id="membroAtivo" checked>
+                            Membro Ativo
+                        </label>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" onclick="closeMembroForm()" class="btn btn-outline">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Guardar Membro</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Participação -->
+    <div id="participacaoModal" class="modal-overlay">
+        <div class="modal-container" style="max-width: 400px;">
+            <div class="modal-header">
+                <h3>Adicionar Participação</h3>
+            </div>
+            <div class="modal-body">
+                <form id="participacaoForm">
+                    <div class="form-group">
+                        <label class="form-label">Membro</label>
+                        <select id="participacaoMembro" class="form-select" required></select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Papel / Função na Peça</label>
+                        <input type="text" id="participacaoFuncao" class="form-input" required placeholder="Ex: Romeu">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" onclick="closeParticipacaoModal()"
+                            class="btn btn-outline">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Adicionar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Admin -->
+    <div id="adminForm" class="modal-overlay">
+        <div class="modal-container" style="max-width: 450px;">
+            <div class="modal-header">
+                <h3>Novo Administrador</h3>
+                <button onclick="closeAdminForm()" class="btn-icon"
+                    style="border:none; background:none; font-size:1.2rem;">✕</button>
+            </div>
+            <div class="modal-body">
+                <form id="adminFormElement">
+                    <div class="form-group">
+                        <label class="form-label">Nome</label>
+                        <input type="text" id="adminNome" class="form-input" required
+                            placeholder="Ex: Professor Rafael">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Email</label>
+                        <input type="email" id="adminEmail" class="form-input" required placeholder="email@escola.pt">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Palavra-passe Inicial</label>
+                        <input type="password" id="adminPassword" class="form-input" required minlength="6">
+                        <small style="color:var(--color-text-muted);">Mínimo 6 caracteres.</small>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" onclick="closeAdminForm()" class="btn btn-outline">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Criar Conta</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Generic Confirmation Modal -->
+    <div id="confirmModal" class="modal-overlay" style="z-index: 9999;">
+        <div class="modal-container" style="max-width: 400px;">
+            <div class="modal-header">
+                <h3 id="confirmTitle">Confirmar Ação</h3>
+            </div>
+            <div class="modal-body">
+                <p id="confirmMessage" style="color: var(--color-text-muted); font-size: 1rem;">Tem a certeza?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" onclick="closeConfirmModal(false)" class="btn btn-outline">Cancelar</button>
+                <button type="button" id="confirmBtnAction" class="btn btn-danger">Eliminar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast"
+        style="position: fixed; bottom: 20px; right: 20px; background: var(--color-primary); color: white; padding: 12px 24px; border-radius: 8px; box-shadow: 0 10px 20px rgba(0,0,0,0.2); transform: translateY(100px); opacity: 0; transition: all 0.3s; z-index: 9999;">
+        Ação realizada com sucesso!
+    </div>
+
+    <script src="admin-tutorial.js"></script>
+    <script src="admin.js"></script>
+    <script>
+        // Simple UI scripts just for the layout
+        function showToast(msg, type = 'success') {
+            const t = document.getElementById('toast');
+            if (!t) return;
+
+            t.textContent = msg;
+
+            // Adjust colors based on type
+            if (type === 'error' || type === 'danger') {
+                t.style.background = '#ef4444';
+            } else if (type === 'info') {
+                t.style.background = '#3b82f6';
+            } else {
+                t.style.background = 'var(--color-primary)';
+            }
+
+            t.style.transform = 'translateY(0)';
+            t.style.opacity = '1';
+            setTimeout(() => {
+                t.style.transform = 'translateY(100px)';
+                t.style.opacity = '0';
+            }, 4000);
+        }
+
+        // Global exposure for admin.js compatibility
+        window.showToast = showToast; 
+    </script>
+</body>
+
+</html>
