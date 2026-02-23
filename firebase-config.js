@@ -1,14 +1,12 @@
 // Firebase Configuration
 // NOTA: Substitui estes valores pelos teus dados do Firebase Console
 const firebaseConfig = {
-    apiKey: "AIzaSyA8azNy6GEgD190y_fW91ahUbKa1w5veik",
-    authDomain: "aawards.firebaseapp.com",
-    databaseURL: "https://aawards-default-rtdb.firebaseio.com",
-    projectId: "aawards",
-    storageBucket: "aawards.firebasestorage.app",
-    messagingSenderId: "839334918366",
-    appId: "1:839334918366:web:454a259fa3e2665b46ea4f",
-    measurementId: "G-NLLMB9THVX"
+    apiKey: "AIzaSyBwckHCrJap6lgyZAvBdFeZcYGhjcJpL6A",
+    authDomain: "clube-de-teatro-279e9.firebaseapp.com",
+    projectId: "clube-de-teatro-279e9",
+    storageBucket: "clube-de-teatro-279e9.firebasestorage.app",
+    messagingSenderId: "1083907917048",
+    appId: "1:1083907917048:web:697ab2fff197fe9dce670d"
 };
 
 // Initialize Firebase
