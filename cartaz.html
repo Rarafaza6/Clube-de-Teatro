@@ -22,6 +22,17 @@
 </head>
 
 <body>
+    <!-- Theme Initializer -->
+    <script>
+        (function () {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                document.documentElement.setAttribute('data-theme', savedTheme);
+            } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            }
+        })();
+    </script>
     <!-- Header -->
     <header class="header">
         <a href="index.html" class="header__logo">
@@ -35,6 +46,8 @@
         </button>
 
         <nav class="nav" id="nav">
+            <button onclick="toggleTheme()" class="btn-theme-toggle" id="themeToggleBtn"
+                aria-label="Alterar Tema">🌓</button>
             <a href="https://docs.google.com/forms/d/e/1FAIpQLSfzutsVwemh96pyEjzr5rRZK1sToBKhgz5D7gs1oZEnQQHU1Q/viewform?usp=dialog"
                 class="nav__link nav__link--highlight">Junta-te ao Clube!</a>
             <a href="cartaz.html" class="nav__link">Em Cartaz</a>

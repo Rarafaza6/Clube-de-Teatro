@@ -50,6 +50,29 @@
     --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+[data-theme="dark"] {
+    --color-primary: #3b82f6;
+    /* More vibrant blue for dark */
+    --color-primary-light: #60a5fa;
+    --color-primary-dark: #f8fafc;
+    --color-accent: #ff4d4d;
+    /* Reactive red */
+    --color-bg: #020617;
+    /* Deepest atmospheric blue */
+    --color-surface: rgba(30, 41, 59, 0.7);
+    /* Glass surface */
+    --color-text-main: #f1f5f9;
+    --color-text-muted: #94a3b8;
+    --color-border: rgba(255, 255, 255, 0.1);
+    --shadow-sm: 0 4px 12px 0 rgba(0, 0, 0, 0.5);
+    --shadow-md: 0 8px 32px 0 rgba(0, 0, 0, 0.7);
+    --shadow-lg: 0 12px 48px 0 rgba(0, 0, 0, 0.9);
+}
+
+body {
+    transition: background-color 0.5s ease, color 0.5s ease;
+}
+
 /* --- RESET & BASE --- */
 *,
 *::before,
@@ -132,7 +155,13 @@ button {
     color: var(--color-surface);
     display: flex;
     flex-direction: column;
-    border-right: 1px solid rgba(255, 255, 255, 0.05);
+    border-right: 1px solid var(--color-border);
+    transition: background-color 0.5s ease;
+}
+
+[data-theme="dark"] .app-sidebar {
+    background-color: rgba(2, 6, 23, 0.8);
+    backdrop-filter: blur(20px);
 }
 
 .sidebar-header {
@@ -164,8 +193,6 @@ button {
     padding: var(--spacing-md);
     background: transparent;
     border: none;
-    color: var(--color-text-muted);
-    /* Proper muted text for dark bg actually needs to be lighter */
     color: #94a3b8;
     text-align: left;
     border-radius: var(--radius-sm);
@@ -180,9 +207,10 @@ button {
 }
 
 .nav-item.active {
-    background-color: var(--color-accent);
+    background-color: #3b82f6;
+    /* Sophisticated Cyan-Blue */
     color: var(--color-surface);
-    box-shadow: var(--shadow-md);
+    box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
 }
 
 .sidebar-footer {
@@ -208,6 +236,12 @@ button {
     justify-content: space-between;
     padding: 0 var(--spacing-xl);
     flex-shrink: 0;
+    transition: background-color 0.5s ease;
+}
+
+[data-theme="dark"] .top-bar {
+    backdrop-filter: blur(12px);
+    background-color: rgba(2, 6, 23, 0.7);
 }
 
 .page-title {
@@ -603,4 +637,479 @@ button {
 
 .admin-item .btn-icon:hover {
     background: var(--color-bg);
+}
+
+/* =========================================
+   RESPONSIVE - 800x600 ADJUSTMENTS
+   ========================================= */
+/* POS Layout Grid */
+.pos-layout-grid {
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    height: calc(100vh - 120px);
+    gap: 0;
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+}
+
+.pos-main-panel {
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid var(--color-border);
+    background: #f8fafc;
+    height: 100%;
+    overflow: hidden;
+}
+
+.pos-sidebar-panel {
+    display: flex;
+    flex-direction: column;
+    background: #0f172a;
+    color: white;
+    height: 100%;
+    overflow-y: auto;
+}
+
+/* POS Specific Compactness */
+#posSection .card {
+    padding: 10px;
+}
+
+@media screen and (max-width: 1100px) {
+    .pos-layout-grid {
+        grid-template-columns: 1fr 320px;
+    }
+}
+
+/* --- POS SIDEBAR SEMANTIC CLASSES (GLOBAL) --- */
+.pos-sidebar-header {
+    padding: 24px;
+    background: rgba(255, 255, 255, 0.03);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    text-align: center;
+}
+
+.pos-sidebar-label {
+    font-size: 0.75rem;
+    color: #94a3b8;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 5px;
+}
+
+.pos-sidebar-value {
+    font-size: 2.2rem;
+    font-weight: 900;
+    color: #10b981;
+}
+
+.pos-calc-display {
+    padding: 24px 25px;
+    text-align: right;
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.pos-calc-label {
+    font-size: 0.8rem;
+    color: #94a3b8;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+}
+
+.pos-calc-label-accent {
+    color: #3b82f6;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-top: 16px;
+    margin-bottom: 4px;
+}
+
+.pos-calc-label-success {
+    color: #10b981;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+}
+
+.pos-calc-total-input {
+    background: transparent;
+    border: none;
+    font-size: 2rem;
+    font-weight: 800;
+    color: white;
+    text-align: right;
+    width: 100%;
+    outline: none;
+}
+
+.pos-calc-received {
+    font-size: 2.8rem;
+    font-weight: 900;
+    color: white;
+    line-height: 1;
+}
+
+.pos-calc-change {
+    font-size: 3.2rem;
+    font-weight: 900;
+    color: #10b981;
+    line-height: 1;
+}
+
+.pos-calc-divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.1);
+    margin: 16px 0;
+}
+
+.pos-keypad-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 16px;
+    gap: 8px;
+}
+
+.pos-quick-cash {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin-bottom: 4px;
+}
+
+.pos-quick-cash button {
+    background: #1e293b;
+    color: white;
+    padding: 10px 2px;
+    font-weight: 800;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-sm);
+}
+
+.pos-keypad-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+}
+
+.pos-keypad-grid button {
+    padding: 16px;
+    background: rgba(255, 255, 255, 0.05);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 1.4rem;
+    font-weight: 700;
+    transition: var(--transition);
+}
+
+.pos-keypad-grid button:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.pos-keypad-grid .btn-clear {
+    background: var(--color-error);
+}
+
+.btn-pos-confirm {
+    width: 100%;
+    margin-top: 8px;
+    background: #16a34a;
+    color: white;
+    padding: 16px;
+    font-size: 1.2rem;
+    font-weight: 900;
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 6px 20px rgba(22, 163, 74, 0.3);
+    transition: var(--transition);
+}
+
+.btn-pos-confirm:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(22, 163, 74, 0.4);
+}
+
+/* --- RESPONSIVE ADAPTATIONS --- */
+@media screen and (max-width: 850px) {
+    :root {
+        --sidebar-width: 70px;
+        --spacing-xl: 16px;
+        --spacing-lg: 12px;
+    }
+
+    .brand-title {
+        display: none;
+    }
+
+    .nav-item span {
+        display: none;
+    }
+
+    .nav-item {
+        justify-content: center;
+        padding: 15px 0;
+    }
+
+    .top-bar {
+        padding: 0 10px;
+    }
+
+    .content-scroll-area {
+        padding: 8px;
+    }
+
+    .pos-layout-grid {
+        grid-template-columns: 1fr 320px !important;
+        height: calc(100vh - 80px) !important;
+        overflow: hidden !important;
+        border-radius: 0;
+    }
+
+    .pos-main-panel {
+        overflow-y: auto !important;
+        background: white;
+    }
+
+    .pos-sidebar-panel {
+        width: 320px !important;
+        position: relative;
+        z-index: 2001;
+        /* Above modal overlay */
+    }
+}
+
+/* VERTICAL OPTIMIZATION (Strictly No-Scroll for 800x600) */
+@media screen and (max-height: 700px) {
+    :root {
+        --header-height: 44px;
+    }
+
+    .top-bar {
+        padding: 0 8px;
+    }
+
+    .content-scroll-area {
+        padding: 4px;
+    }
+
+    .pos-layout-grid {
+        height: calc(100vh - 52px) !important;
+        overflow: hidden !important;
+    }
+
+    .pos-sidebar-header {
+        padding: 8px;
+    }
+
+    .pos-sidebar-label {
+        font-size: 0.6rem;
+        margin-bottom: 2px;
+    }
+
+    .pos-sidebar-value {
+        font-size: 1.4rem;
+    }
+
+    .pos-calc-display {
+        padding: 8px 15px;
+    }
+
+    .pos-calc-label {
+        font-size: 0.6rem;
+        margin-bottom: 2px;
+    }
+
+    .pos-calc-total-input {
+        font-size: 1.4rem;
+    }
+
+    .pos-calc-received {
+        font-size: 1.8rem;
+    }
+
+    .pos-calc-change {
+        font-size: 2rem;
+    }
+
+    .pos-calc-divider {
+        margin: 6px 0;
+    }
+
+    .pos-calc-label-accent {
+        margin-top: 6px;
+        font-size: 0.6rem;
+    }
+
+    .pos-calc-label-success {
+        font-size: 0.6rem;
+    }
+
+    .pos-keypad-container {
+        padding: 8px;
+        gap: 4px;
+    }
+
+    .pos-quick-cash button {
+        padding: 2px 0;
+        font-size: 0.7rem;
+        height: 32px;
+    }
+
+    .pos-keypad-grid {
+        gap: 4px;
+    }
+
+    .pos-keypad-grid button {
+        padding: 8px;
+        font-size: 1rem;
+        border-radius: 6px;
+        height: 42px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .btn-pos-confirm {
+        padding: 10px;
+        font-size: 1rem;
+        margin-top: 4px;
+        border-radius: 10px;
+        height: 48px;
+    }
+
+    .seat-map-pos {
+        transform: scale(0.65) !important;
+        transform-origin: top center;
+        margin-bottom: 0px !important;
+        /* FIX OVERLAP */
+        padding: 5px !important;
+        max-height: 200px !important;
+        /* Limit height to prevent overlap */
+        overflow: auto !important;
+    }
+
+    .seat-map-pos .seat {
+        width: 22px;
+        height: 22px;
+        font-size: 8px;
+    }
+}
+
+/* Global overide for modal visibility and positioning */
+#posManualModal {
+    z-index: 2000;
+    justify-content: flex-start;
+    /* Align horizontally with the offset */
+    padding-right: 400px;
+    /* Sidebar width for desktop */
+}
+
+#posManualModal .modal-container {
+    margin: auto;
+    /* Center within the remaining 1fr area */
+}
+
+@media screen and (max-width: 1100px) {
+    #posManualModal {
+        padding-right: 320px;
+        /* Match shrunken sidebar */
+    }
+}
+
+@media screen and (max-width: 850px) {
+    #posManualModal {
+        padding-right: 320px;
+        /* Right POS sidebar width */
+        padding-left: 70px;
+        /* Left Nav sidebar width */
+    }
+
+    #posManualModal .modal-container {
+        max-width: calc(100vw - 410px);
+        /* Fit exactly in middle panel */
+        min-width: 280px;
+    }
+}
+
+/* =========================================
+   SEAT MAP POS STYLES
+   ========================================= */
+.seat-map-pos {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 15px;
+    margin-top: 15px;
+    max-height: 320px;
+    overflow: auto;
+    /* Enable all scrolls */
+    display: flex;
+    flex-direction: column;
+}
+
+.seat-map-pos .seat-row {
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+    margin-bottom: 4px;
+    white-space: nowrap;
+    /* Avoid wrapping */
+}
+
+.seat-map-pos .seat {
+    width: 28px;
+    height: 28px;
+    font-size: 10px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    background: #10b981;
+    /* Emerald Green */
+    color: white;
+    font-weight: 800;
+    box-shadow: 0 2px 4px rgba(16, 185, 129, 0.2);
+}
+
+.seat-map-pos .seat:hover:not(.seat--occupied) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(16, 185, 129, 0.4);
+    filter: brightness(1.1);
+}
+
+.seat-map-pos .seat--occupied {
+    background: #cbd5e1;
+    color: #94a3b8;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.seat-map-pos .seat--selected {
+    background: #3b82f6;
+    /* Electric Blue */
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.5);
+    border: 2px solid white;
+}
+
+.seat-map-pos .stage-indicator {
+    background: #1e293b;
+    color: white;
+    text-align: center;
+    padding: 5px;
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    border-radius: 4px;
+    margin-bottom: 15px;
 }

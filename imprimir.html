@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Imprimir Bilhetes - Clube de Teatro</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Outfit:wght@400;900&display=swap"
+        rel="stylesheet">
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+    <script src="firebase-config.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+    <style>
+        :root {
+            --color-primary: #000;
+            /* Minimalist Black */
+            --color-text: #000;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: white;
+            margin: 0;
+            padding: 20px;
+            color: black;
+        }
+
+        .no-print-warning {
+            background: #f8fafc;
+            padding: 15px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .ticket {
+                break-inside: avoid;
+                margin-bottom: 10px !important;
+                border: 1px solid #000 !important;
+                box-shadow: none !important;
+                width: 100% !important;
+                max-width: 100% !important;
+            }
+        }
+
+        .tickets-container {
+            max-width: 450px;
+            margin: 0 auto;
+        }
+
+        .ticket {
+            background: white;
+            border: 1px solid #000;
+            padding: 25px;
+            margin-bottom: 20px;
+            position: relative;
+            box-shadow: none;
+            overflow: hidden;
+        }
+
+        .ticket-header {
+            text-align: center;
+            border-bottom: 2px solid #000;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .ticket-badge {
+            display: inline-block;
+            background: #000;
+            color: #fff;
+            padding: 4px 12px;
+            font-size: 0.65rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+            border-radius: 20px;
+            margin-bottom: 10px;
+        }
+
+        .peca-name {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 900;
+            margin: 5px 0;
+            color: #000;
+        }
+
+        .sessao-label {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #000;
+            opacity: 0.8;
+            margin-top: 5px;
+        }
+
+        .ticket-body {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .info-group {
+            margin-bottom: 5px;
+        }
+
+        .info-label {
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            color: #000;
+            font-weight: 800;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+        }
+
+        .info-value {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: #000;
+        }
+
+        .ticket-code-display {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border: 2px solid #000;
+            padding: 20px;
+            margin-top: 10px;
+        }
+
+        .qrcode-canvas {
+            margin-bottom: 10px;
+        }
+
+        .ticket-serial {
+            font-family: monospace;
+            font-size: 1.2rem;
+            font-weight: 900;
+            letter-spacing: 4px;
+        }
+
+        .ticket-footer {
+            margin-top: 25px;
+            padding-top: 15px;
+            border-top: 1px solid #000;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .footer-notice {
+            font-size: 0.6rem;
+            font-weight: 700;
+            line-height: 1.4;
+            max-width: 70%;
+        }
+
+        .club-branding {
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 900;
+            letter-spacing: 1px;
+        }
+
+        .ticket--group {
+            border-style: double;
+            border-width: 4px;
+        }
+
+        .btn-print {
+            background: #000;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 800;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 50px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="tickets-container">
+        <div id="noPrint" class="no-print">
+            <button onclick="window.print()" class="btn-print">🖨️ Imprimir Bilhetes Agora</button>
+            <div class="no-print-warning">
+                <strong>Bilhetes carregados:</strong> Podes agora imprimir com baixo consumo de tinta.
+            </div>
+        </div>
+
+        <div id="loader" class="loading">
+            <h2 style="font-family: 'Outfit';">A preparar bilhetes...</h2>
+            <div style="font-size: 3rem; animation: spin 2s linear infinite;">🔄</div>
+        </div>
+
+        <div id="ticketsList"></div>
+    </div>
+
+    <script>
+        async function loadTickets() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const idsStr = urlParams.get('ids');
+            if (!idsStr) {
+                document.getElementById('loader').innerHTML = '<h2>❌ Erro: Nenhum bilhete selecionado.</h2>';
+                return;
+            }
+
+            const ids = idsStr.split(',');
+            const listEl = document.getElementById('ticketsList');
+            const loader = document.getElementById('loader');
+
+            try {
+                const pecas = {}; // Cache pieces
+
+                for (const id of ids) {
+                    const doc = await db.collection('reservas').doc(id).get();
+                    if (!doc.exists) continue;
+                    const r = doc.data();
+
+                    // Load piece if not cached
+                    if (!pecas[r.pecaId]) {
+                        const pDoc = await db.collection('pecas').doc(r.pecaId).get();
+                        pecas[r.pecaId] = pDoc.exists ? pDoc.data() : { nome: 'Peça Desconhecida' };
+                    }
+                    const peca = pecas[r.pecaId];
+                    const sessao = (peca.sessoes || []).find(s => s.id === r.sessaoId) || { data: '', local: '' };
+
+                    const date = sessao.data ? new Date(sessao.data) : null;
+                    const dateStr = date ? date.toLocaleDateString('pt-PT', { day: '2-digit', month: '2-digit', year: 'numeric' }) : '-';
+                    const timeStr = date ? date.getHours().toString().padStart(2, '0') + ':' + date.getMinutes().toString().padStart(2, '0') : '-';
+
+                    // Group Data Logic
+                    r.isGrupo = !!r.grupoId;
+                    r.lugaresGrupais = r.isGrupo ? (r.lugaresGrupais || r.seats?.join(', ') || '-') : `${r.fila}${r.lugar}`;
+
+                    const ticketHTML = `
+                        <div class="ticket ${r.isGrupo ? 'ticket--group' : ''}">
+                            <div class="ticket-header">
+                                <div class="ticket-badge">${r.isGrupo ? 'BILHETE DE GRUPO' : 'BILHETE INDIVIDUAL'}</div>
+                                <div class="peca-name">${peca.nome.toUpperCase()}</div>
+                                <div class="sessao-label">${dateStr} • ${timeStr} • ${sessao.local || 'Auditório'}</div>
+                            </div>
+                            
+                            <div class="ticket-body">
+                                <div class="info-group">
+                                    <div class="info-label">VISITANTE / TURMA</div>
+                                    <div class="info-value">${r.nomeReservante}</div>
+                                </div>
+                                <div class="info-group" style="text-align: right;">
+                                    <div class="info-label">LUGARES</div>
+                                    <div class="info-value">${r.isGrupo ? r.lugaresGrupais : `Fila ${r.fila} • Lugar ${r.lugar}`}</div>
+                                </div>
+                                <div class="info-group" style="grid-column: span 2;">
+                                    <div class="info-label">CÓDIGO DE ENTRADA</div>
+                                    <div class="ticket-code-display">
+                                        <div id="qrcode-${id}" class="qrcode-canvas"></div>
+                                        <div class="ticket-serial">${r.codigoBilhete}</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="ticket-footer">
+                                <div class="footer-notice">
+                                    ESTE BILHETE É PESSOAL E INTRANSMISSÍVEL. <br>
+                                    APRESENTA ESTE QR CODE À ENTRADA DO AUDITÓRIO.
+                                </div>
+                                <div class="club-branding">CLUBE DE TEATRO DA CIDADELA</div>
+                            </div>
+                        </div>
+                    `;
+
+                    listEl.innerHTML += ticketHTML;
+
+                    // Generate QR Code
+                    new QRCode(document.getElementById(`qrcode-${id}`), {
+                        text: r.codigoBilhete,
+                        width: 128,
+                        height: 128,
+                        colorDark: "#000000",
+                        colorLight: "#ffffff",
+                        correctLevel: QRCode.CorrectLevel.H
+                    });
+                }
+
+                loader.style.display = 'none';
+
+                // Auto print after a small delay
+                setTimeout(() => {
+                    if (urlParams.get('auto') === 'true') {
+                        window.print();
+                    }
+                }, 1000);
+
+            } catch (err) {
+                console.error(err);
+                loader.innerHTML = '<h2>❌ Erro ao carregar bilhetes.</h2>';
+            }
+        }
+
+        window.onload = loadTickets;
+    </script>
+</body>
+
+</html>

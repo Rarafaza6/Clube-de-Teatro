@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verificar Bilhete - Clube de Teatro</title>
+    <link rel="icon" href="caras.png">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@300;400;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="firebase-config.js"></script>
+
+    <!-- QR Scanner Library -->
+    <script src="https://unpkg.com/html5-qrcode"></script>
+
+    <style>
+        .verificar-page {
+            min-height: calc(100vh - 200px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        .login-required {
+            text-align: center;
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+        }
+
+        .login-form input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 10px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        #html5-qrcode-button-camera-permission,
+        #html5-qrcode-button-camera-start,
+        #html5-qrcode-button-camera-stop {
+            background: var(--color-primary, #8b5cf6) !important;
+            color: white !important;
+            border: none !important;
+            padding: 10px 20px !important;
+            border-radius: 8px !important;
+            cursor: pointer !important;
+            margin: 5px !important;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Theme Initializer -->
+    <script>
+        (function () {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                document.documentElement.setAttribute('data-theme', savedTheme);
+            } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            }
+        })();
+    </script>
+    <header class="header">
+        <a href="index.html" class="header__logo">
+            <img src="teatro.png" alt="Clube de Teatro Logo">
+        </a>
+        <button class="nav__toggle" aria-label="Menu" onclick="toggleMenu()">
+            <span></span><span></span><span></span>
+        </button>
+        <nav class="nav" id="nav">
+            <button onclick="toggleTheme()" class="btn-theme-toggle" id="themeToggleBtn"
+                aria-label="Alterar Tema">🌓</button>
+            <a href="cartaz.html" class="nav__link">Em Cartaz</a>
+            <a href="membros.html" class="nav__link">Membros</a>
+            <a href="contatos.html" class="nav__link">Contactos</a>
+        </nav>
+    </header>
+    <div class="nav-overlay" id="navOverlay" onclick="toggleMenu()"></div>
+
+    <section class="hero" style="background-image: url('fundo.png'); height: 30vh; min-height: 200px;">
+        <div class="hero__content">
+            <h1 class="hero__title">🎫 Verificar Bilhete</h1>
+            <p class="hero__subtitle">Área reservada para staff</p>
+        </div>
+    </section>
+
+    <section class="section verificar-page" id="auth-section">
+        <!-- Login form - shown if not authenticated -->
+        <div class="login-required" id="loginBox">
+            <h3>🔐 Acesso Restrito</h3>
+            <p style="color:#64748b; margin-bottom:20px;">Faz login com a tua conta de admin para verificar bilhetes.
+            </p>
+            <form class="login-form" onsubmit="handleLogin(event)">
+                <input type="email" id="loginEmail" placeholder="Email" required>
+                <input type="password" id="loginPassword" placeholder="Password" required>
+                <button type="submit" class="btn btn--primary" style="width:100%; margin-top:10px;">Entrar</button>
+            </form>
+            <p id="loginError" style="color:#ef4444; margin-top:10px; display:none;"></p>
+        </div>
+
+        <!-- Verificador - shown when authenticated -->
+        <div id="verificar-container" style="display:none; width:100%; max-width:600px;">
+            <!-- Injected by site-loader.js -->
+        </div>
+    </section>
+
+    <footer class="footer">
+        <p>&copy; Clube de Teatro da Cidadela <span class="copyright-year">2026</span></p>
+        <p class="footer__text">Site desenvolvido por Rafael Diogo</p>
+    </footer>
+
+    <script>
+        function toggleMenu() {
+            const nav = document.getElementById('nav');
+            const overlay = document.getElementById('navOverlay');
+            nav.classList.toggle('active');
+            overlay.classList.toggle('active');
+            document.body.style.overflow = nav.classList.contains('active') ? 'hidden' : '';
+        }
+
+        // Auth check
+        firebase.auth().onAuthStateChanged(async (user) => {
+            if (user) {
+                // Check if admin
+                try {
+                    const adminDoc = await firebase.firestore().collection('admins').doc(user.email).get();
+                    if (adminDoc.exists) {
+                        document.getElementById('loginBox').style.display = 'none';
+                        document.getElementById('verificar-container').style.display = 'block';
+                    } else {
+                        document.getElementById('loginError').textContent = 'Conta não autorizada';
+                        document.getElementById('loginError').style.display = 'block';
+                        await firebase.auth().signOut();
+                    }
+                } catch (e) {
+                    console.error(e);
+                }
+            }
+        });
+
+        async function handleLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            const errorEl = document.getElementById('loginError');
+
+            try {
+                await firebase.auth().signInWithEmailAndPassword(email, password);
+                errorEl.style.display = 'none';
+            } catch (error) {
+                errorEl.textContent = 'Email ou password incorretos';
+                errorEl.style.display = 'block';
+            }
+        }
+    </script>
+    <script src="site-loader.js"></script>
+</body>
+
+</html>

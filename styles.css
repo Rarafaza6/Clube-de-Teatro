@@ -17,6 +17,7 @@
   --bg: #f5f7fa;
   /* Clean light grey/white */
   --white: #ffffff;
+  --header-bg: rgba(255, 255, 255, 0.98);
 
   /* Spacing */
   --container-max: 1200px;
@@ -29,6 +30,35 @@
   --radius: 8px;
   /* Standard rounded, not rounded-pill */
   --transition: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+[data-theme="dark"] {
+  --primary: #f8fafc;
+  --secondary: #94a3b8;
+  --accent: #ff4d4d;
+  /* More vibrant neon red */
+  --accent-hover: #ff6666;
+  --text: #f1f5f9;
+  --text-light: #94a3b8;
+  --bg: #020617;
+  /* Deepest blue/black */
+  --white: rgba(30, 41, 59, 0.7);
+  /* Glass surface */
+  --header-bg: rgba(2, 6, 23, 0.85);
+  /* Deep glass header */
+  --shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
+  --hover-shadow: 0 12px 40px rgba(0, 0, 0, 0.9), 0 0 15px rgba(255, 77, 77, 0.1);
+}
+
+body {
+  transition: background-color 0.5s ease, color 0.5s ease;
+}
+
+[data-theme="dark"] .card,
+[data-theme="dark"] .peca-card,
+[data-theme="dark"] .member-card {
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
 }
 
 * {
@@ -77,15 +107,17 @@ img {
   left: 0;
   width: 100%;
   height: var(--header-height);
-  background: rgba(255, 255, 255, 0.98);
-  backdrop-filter: blur(10px);
+  background: var(--header-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 5%;
   z-index: 1000;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-  border-bottom: 3px solid var(--accent);
+  box-shadow: var(--shadow);
+  border-bottom: 1px solid var(--accent);
+  transition: background-color 0.5s ease, border-bottom 0.5s ease;
 }
 
 .header__logo img {
@@ -148,6 +180,23 @@ img {
   background: var(--accent-hover);
 }
 
+.btn-theme-toggle {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 5px;
+  line-height: 1;
+  transition: transform 0.3s var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-theme-toggle:hover {
+  transform: scale(1.1);
+}
+
 .nav__toggle {
   display: none;
 }
@@ -177,8 +226,13 @@ img {
   left: 0;
   width: 100%;
   height: 100%;
-  /* Professional Blue Overlay */
+  /* Dynamic gradient based on theme */
   background: linear-gradient(135deg, rgba(44, 62, 80, 0.85) 0%, rgba(52, 152, 219, 0.8) 100%);
+  transition: opacity 0.5s ease;
+}
+
+[data-theme="dark"] .hero::before {
+  background: linear-gradient(135deg, rgba(2, 6, 23, 0.9) 0%, rgba(30, 41, 59, 0.7) 100%);
 }
 
 .hero__content {
@@ -254,14 +308,18 @@ img {
 }
 
 .card {
-  background: white;
+  background: var(--white);
   border-radius: var(--radius);
   overflow: hidden;
   box-shadow: var(--shadow);
   transition: 0.3s var(--transition);
-  border: 1px solid #eee;
+  border: 1px solid rgba(0, 0, 0, 0.05);
   display: flex;
   flex-direction: column;
+}
+
+[data-theme="dark"] .card {
+  border-color: rgba(255, 255, 255, 0.05);
 }
 
 .card:hover {
@@ -305,18 +363,23 @@ img {
    MEMBRO CARDS
    ========================================= */
 .member-card {
-  background: white;
+  background: var(--white);
   border-radius: var(--radius);
   text-align: center;
   padding: 40px 30px;
   box-shadow: var(--shadow);
   transition: 0.3s;
-  border: 1px solid #eee;
+  border: 1px solid rgba(0, 0, 0, 0.05);
   border-top: 4px solid var(--primary);
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+[data-theme="dark"] .member-card {
+  border-color: rgba(255, 255, 255, 0.05);
+  border-top-color: var(--primary);
 }
 
 .member-card:hover {
@@ -358,10 +421,15 @@ img {
   display: grid;
   grid-template-columns: 350px 1fr;
   gap: 50px;
-  background: white;
+  background: var(--white);
   padding: 40px;
   border-radius: var(--radius);
   box-shadow: var(--shadow);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="dark"] .profile {
+  border-color: rgba(255, 255, 255, 0.05);
 }
 
 .profile__image {
@@ -390,8 +458,15 @@ img {
 }
 
 .btn--primary {
-  background: var(--primary);
+  background: var(--accent);
   color: white;
+  box-shadow: 0 4px 14px rgba(255, 77, 77, 0.3);
+}
+
+.btn--primary:hover {
+  background: var(--accent-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 77, 77, 0.4);
 }
 
 .btn--primary:hover {
@@ -419,7 +494,16 @@ img {
   padding: 60px 20px;
   text-align: center;
   margin-top: 100px;
-  border-top: 5px solid var(--accent);
+  border-top: 1px solid var(--accent);
+  transition: background-color 0.5s ease, border-top 0.5s ease;
+  position: relative;
+  z-index: 10;
+}
+
+[data-theme="dark"] .footer {
+  background: rgba(2, 6, 23, 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
 .footer__logo {
@@ -599,4 +683,317 @@ img {
   color: var(--text-light);
   margin-bottom: 2.5rem;
   max-width: 500px;
+}
+
+/* =========================================
+   PEÇA DETAILS (DYNAMIC CONTENT)
+   ========================================= */
+.peca-subtitle {
+  font-size: 1.8rem;
+  color: var(--primary);
+  margin-bottom: 1.5rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.peca-description-card,
+.peca-sessions-card,
+.peca-cast-card {
+  background: var(--white);
+  padding: 30px;
+  border-radius: var(--radius);
+  margin-bottom: 30px;
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.peca-sinopse {
+  color: var(--text);
+  font-size: 1.1rem;
+  line-height: 1.8;
+}
+
+.session-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.session-time {
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.session-day {
+  font-weight: 800;
+  font-size: 1.4rem;
+  display: block;
+  line-height: 1;
+}
+
+.session-month {
+  font-size: 0.75rem;
+  font-weight: 700;
+  opacity: 0.8;
+}
+
+[data-theme="dark"] .peca-subtitle {
+  color: var(--primary);
+}
+
+[data-theme="dark"] .session-row {
+  border-bottom-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Cast Grid cinematic styling */
+.cast-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.cast-item {
+  display: flex;
+  flex-direction: column;
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: 0.3s;
+}
+
+.cast-item:hover {
+  background: rgba(255, 255, 255, 0.06);
+  transform: translateY(-3px);
+  border-color: var(--accent);
+}
+
+.cast-name {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--primary);
+}
+
+.cast-role {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--accent);
+  margin-top: 4px;
+}
+
+@keyframes poster-float {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.peca-poster {
+  animation: poster-float 6s ease-in-out infinite;
+}
+
+/* =========================================
+   CINEMATIC PEÇA REDESIGN
+   ========================================= */
+
+.peca-hero {
+  position: relative;
+  height: 60vh;
+  min-height: 400px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000;
+}
+
+.hero__background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  filter: blur(30px) brightness(0.4);
+  transform: scale(1.1);
+  z-index: 1;
+  transition: opacity 1s ease;
+}
+
+.peca-hero .hero__content {
+  z-index: 2;
+  text-align: center;
+}
+
+.hero__title#peca-title-main {
+  font-size: 5rem;
+  letter-spacing: -2px;
+  text-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  margin: 0;
+}
+
+.container--peca {
+  max-width: 1400px;
+  margin-top: -100px;
+  position: relative;
+  z-index: 10;
+}
+
+.peca-layout {
+  display: grid;
+  grid-template-columns: 350px 1fr;
+  gap: 40px;
+}
+
+/* Cinematic Sidebar */
+.peca-sidebar {
+  position: sticky;
+  top: 100px;
+  height: fit-content;
+}
+
+.peca-poster {
+  width: 100%;
+  border-radius: 12px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+  margin-bottom: 25px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: transform 0.5s var(--transition);
+}
+
+.peca-poster:hover {
+  transform: scale(1.02);
+}
+
+/* Glassmorphism Cards */
+.glass-card {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 30px;
+  margin-bottom: 30px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  color: var(--text);
+}
+
+[data-theme="light"] .glass-card {
+  background: rgba(255, 255, 255, 0.7);
+  border-color: rgba(0, 0, 0, 0.05);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+}
+
+.peca-meta-card {
+  display: flex;
+  justify-content: space-around;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.meta-item {
+  text-align: center;
+}
+
+.meta-label {
+  display: block;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  opacity: 0.6;
+  margin-bottom: 5px;
+}
+
+.meta-value {
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+
+/* Typography Refinement */
+.peca-subtitle {
+  font-size: 2.2rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  margin-bottom: 25px;
+  background: linear-gradient(to right, var(--accent), #ff8a80);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}
+
+/* Photo Gallery Grid */
+.peca-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.gallery-item {
+  position: relative;
+  aspect-ratio: 16/9;
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: 0.3s var(--transition);
+}
+
+.gallery-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: 0.5s;
+}
+
+.gallery-item:hover img {
+  transform: scale(1.1);
+}
+
+.gallery-item::after {
+  content: '🔍';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.5);
+  font-size: 2rem;
+  opacity: 0;
+  transition: 0.3s;
+}
+
+.gallery-item:hover::after {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+@media (max-width: 900px) {
+  .peca-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .peca-hero {
+    height: 40vh;
+  }
+
+  .hero__title#peca-title-main {
+    font-size: 3rem;
+  }
+
+  .peca-sidebar {
+    position: static;
+  }
+
+  .container--peca {
+    margin-top: -50px;
+  }
 }

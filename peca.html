@@ -21,6 +21,17 @@
 </head>
 
 <body>
+    <!-- Theme Initializer -->
+    <script>
+        (function () {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                document.documentElement.setAttribute('data-theme', savedTheme);
+            } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            }
+        })();
+    </script>
     <header class="header">
         <a href="index.html" class="header__logo">
             <img src="teatro.png" alt="Clube de Teatro Logo">
@@ -29,6 +40,8 @@
             <span></span><span></span><span></span>
         </button>
         <nav class="nav" id="nav">
+            <button onclick="toggleTheme()" class="btn-theme-toggle" id="themeToggleBtn"
+                aria-label="Alterar Tema">🌓</button>
             <a href="https://docs.google.com/forms/d/e/1FAIpQLSfzutsVwemh96pyEjzr5rRZK1sToBKhgz5D7gs1oZEnQQHU1Q/viewform?usp=dialog"
                 class="nav__link nav__link--highlight">Junta-te ao Clube!</a>
             <a href="cartaz.html" class="nav__link">Em Cartaz</a>
@@ -38,14 +51,15 @@
     </header>
     <div class="nav-overlay" id="navOverlay" onclick="toggleMenu()"></div>
 
-    <section class="hero" style="background-image: url('fundo.png');">
+    <section class="hero peca-hero">
+        <div class="hero__background" id="peca-hero-bg"></div>
         <div class="hero__content">
-            <h1 class="hero__title">A carregar...</h1>
+            <h1 class="hero__title" id="peca-title-main">A carregar...</h1>
         </div>
     </section>
 
-    <section class="section">
-        <div class="container" id="peca-detalhes">
+    <section class="section peca-details-section">
+        <div class="container container--peca" id="peca-detalhes">
             <div class="loading">A carregar detalhes da peça...</div>
         </div>
     </section>

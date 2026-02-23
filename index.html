@@ -23,6 +23,17 @@
 </head>
 
 <body>
+    <!-- Theme Initializer -->
+    <script>
+        (function () {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                document.documentElement.setAttribute('data-theme', savedTheme);
+            } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            }
+        })();
+    </script>
     <!-- Header -->
     <header class="header">
         <a href="index.html" class="header__logo">
@@ -38,6 +49,8 @@
 
         <!-- Navegação -->
         <nav class="nav" id="nav">
+            <button onclick="toggleTheme()" class="btn-theme-toggle" id="themeToggleBtn"
+                aria-label="Alterar Tema">🌓</button>
             <a href="https://docs.google.com/forms/d/e/1FAIpQLSfzutsVwemh96pyEjzr5rRZK1sToBKhgz5D7gs1oZEnQQHU1Q/viewform?usp=dialog"
                 class="nav__link nav__link--highlight">Junta-te ao Clube!</a>
             <a href="cartaz.html" class="nav__link">Em Cartaz</a>
@@ -72,7 +85,8 @@
     <footer class="footer">
         <p>&copy; <span id="club-name-footer">Clube de Teatro da Cidadela</span> <span
                 class="copyright-year">2025</span></p>
-        <p class="footer__text">Site desenvolvido por Rafael Diogo</p>
+        <p class="footer__text">Site desenvolvido por Rafael Diogo | <a href="recuperar.html"
+                style="color: inherit; text-decoration: underline;">Recuperar Bilhete</a></p>
         <a href="https://aecidadela.pt">
             <img src="https://aecidadela.pt/wp-content/uploads/2019/06/logo-1.png" alt="Logo AECidadela"
                 class="footer__logo">
@@ -91,6 +105,15 @@
             nav.classList.toggle('active');
             overlay.classList.toggle('active');
             document.body.style.overflow = nav.classList.contains('active') ? 'hidden' : '';
+        }
+
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme') || 'light';
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
         }
 
         // Fechar menu ao clicar num link

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Termos e Condições - Clube de Teatro</title>
+    <link rel="icon" href="caras.png">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@300;400;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="firebase-config.js"></script>
+
+    <style>
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.85);
+            --glass-border: rgba(255, 255, 255, 0.5);
+            --primary-gradient: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+        }
+
+        body {
+            background: #f8fafc;
+            font-family: 'Inter', sans-serif;
+            color: #1e293b;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .terms-hero {
+            background: var(--primary-gradient);
+            padding: 80px 20px;
+            text-align: center;
+            color: white;
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0% 100%);
+        }
+
+        .terms-hero h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            letter-spacing: -1px;
+        }
+
+        .terms-content {
+            max-width: 900px;
+            margin: -60px auto 60px;
+            padding: 0 20px;
+            width: 100%;
+        }
+
+        .terms-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            padding: 50px;
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+            animation: slideUp 0.8s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .terms-text {
+            line-height: 1.8;
+            font-size: 1.1rem;
+            color: #334155;
+            white-space: pre-wrap;
+            /* Preserve line breaks from admin */
+        }
+
+        .terms-text h2 {
+            font-family: 'Outfit', sans-serif;
+            color: #1e293b;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            border-left: 5px solid var(--color-primary);
+            padding-left: 15px;
+        }
+
+        .loading-vibe {
+            text-align: center;
+            padding: 100px 0;
+            color: #64748b;
+        }
+
+        .footer-action {
+            margin-top: 50px;
+            text-align: center;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 30px;
+        }
+
+        .btn-premium {
+            background: var(--primary-gradient);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-block;
+        }
+
+        .btn-premium:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(30, 41, 59, 0.2);
+        }
+
+        .terms-placeholder {
+            opacity: 0.5;
+            font-style: italic;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Theme Initializer -->
+    <script>
+        (function () {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                document.documentElement.setAttribute('data-theme', savedTheme);
+            } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            }
+        })();
+    </script>
+    <header class="header">
+        <a href="index.html" class="header__logo">
+            <img src="teatro.png" alt="Logo">
+        </a>
+        <nav class="nav" id="nav">
+            <button onclick="toggleTheme()" class="btn-theme-toggle" id="themeToggleBtn"
+                aria-label="Alterar Tema">🌓</button>
+            <a href="cartaz.html" class="nav__link">Em Cartaz</a>
+            <a href="membros.html" class="nav__link">Membros</a>
+            <a href="contatos.html" class="nav__link">Contactos</a>
+        </nav>
+    </header>
+
+    <section class="terms-hero">
+        <h1>Compromisso & Transparência</h1>
+        <p>A tua experiência e segurança são a nossa prioridade.</p>
+    </section>
+
+    <main class="terms-content">
+        <div id="termsLoader" class="loading-vibe">
+            <div class="loading-spinner"></div>
+            <p>A carregar termos oficiais...</p>
+        </div>
+
+        <div id="termsContainer" class="terms-card" style="display: none;">
+            <div id="termsDisplay" class="terms-text"></div>
+
+            <div class="footer-action">
+                <a href="javascript:history.back()" class="btn-premium">Voltar</a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; Clube de Teatro da Cidadela <span class="copyright-year">2026</span></p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const loader = document.getElementById('termsLoader');
+            const container = document.getElementById('termsContainer');
+            const display = document.getElementById('termsDisplay');
+
+            // Hardcoded Static Terms for Permanence
+            const termsContent = `
+<h2>1. Isenção de Responsabilidade</h2>
+O Clube de Teatro e o Agrupamento de Escolas da Cidadela declinam qualquer responsabilidade por danos, perdas de bens pessoais ou incidentes ocorridos durante o evento. O acesso às instalações é feito por conta e risco do portador do bilhete.
+
+<h2>2. Política de Reembolso</h2>
+Dada a natureza associativa e o cariz escolar do projeto, todas as reservas são finais. Não se efetuam reembolsos, trocas ou devoluções de donativos ou taxas de reserva em caso de não comparência ou cancelamento pelo utilizador.
+
+<h2>3. Alterações e Cancelamento de Eventos</h2>
+O Clube reserva-se o direito de alterar o elenco, horário ou programa por motivos técnicos ou de força maior. Em caso de cancelamento definitivo, o Clube não assume responsabilidade por indemnizações suplementares.
+
+<h2>4. Privacidade e Dados</h2>
+Os dados recolhidos são usados para a gestão da bilheteira e segurança dos espectadores. Estes dados são integrados no arquivo histórico do Clube de Teatro para fins de registo e memória das atividades, não sendo eliminados automaticamente.
+
+<h2>5. Direito de Admissão</h2>
+O Clube reserva-se o direito de admissão por motivos de segurança ou comportamento inadequado, garantindo o bom funcionamento do espetáculo.
+            `;
+
+            display.innerHTML = termsContent;
+            loader.style.display = 'none';
+            container.style.display = 'block';
+        });
+    </script>
+</body>
+
+</html>
