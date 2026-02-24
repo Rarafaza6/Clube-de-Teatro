@@ -186,7 +186,8 @@ function showDashboard(user) {
         const main = document.querySelector('.app-main');
         if (main) main.style.paddingLeft = '';
 
-        loadDashboardStats();
+        // For admins, show the full dashboard section
+        showSection('dashboard');
     }
 
     // Iniciar tutorial se necessário
