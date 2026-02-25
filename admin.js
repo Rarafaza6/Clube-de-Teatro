@@ -1642,7 +1642,7 @@ async function gerarLinksElenco() {
         const membro = allMembros.find(m => m.id === p.membroId);
         const nome = membro ? membro.nome : 'Membro';
         const result = await createTokenElenco(currentPecaId, p.membroId, nome, quota, sessaoId);
-        const currentBaseUrl = window.location.href.split('admin.html')[0];
+        const currentBaseUrl = window.location.href.substring(0, window.location.href.lastIndexOf('/') + 1);
         const url = `${currentBaseUrl}bilhetes.html?peca=${currentPecaId}&token=${result.token}`;
         links.push({ nome, url, token: result.token });
     }
@@ -1727,7 +1727,7 @@ async function loadTurmasConvidadas(pecaId) {
         }
 
         container.innerHTML = tokens.map(t => {
-            const currentBaseUrl = window.location.href.split('admin.html')[0];
+            const currentBaseUrl = window.location.href.substring(0, window.location.href.lastIndexOf('/') + 1);
             const url = `${currentBaseUrl}bilhetes.html?peca=${pecaId}&token=${t.token}`;
             const usadas = t.reservasUsadas || 0;
             const total = t.quotaMax || 0;
