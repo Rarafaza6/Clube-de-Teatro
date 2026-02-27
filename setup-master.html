@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recuperação Master - Clube de Teatro</title>
+    <link rel="icon" href="caras.png">
+    <link rel="stylesheet" href="admin-styles.css">
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="firebase-config.js"></script>
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: #f1f5f9;
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .recovery-card {
+            width: 100%;
+            max-width: 400px;
+            padding: 40px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e2e8f0;
+        }
+
+        .recovery-title {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            font-size: 1.5rem;
+            color: #1e293b;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .recovery-desc {
+            font-size: 0.85rem;
+            color: #64748b;
+            text-align: center;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+
+        #masterMsg {
+            margin-top: 20px;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            text-align: center;
+            display: none;
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="recovery-card">
+        <div style="text-align: center; font-size: 3rem; margin-bottom: 15px;">🛡️</div>
+        <h1 class="recovery-title">Porta de Emergência</h1>
+        <p class="recovery-desc">
+            Usa esta ferramenta para criar uma conta de Administrador Master se perderes o acesso ao painel principal.
+        </p>
+
+        <form id="masterForm">
+            <div class="form-group">
+                <label class="form-label">Nome Completo</label>
+                <input type="text" id="masterNome" class="form-input" required placeholder="Ex: Admin de Recuperação">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Email</label>
+                <input type="email" id="masterEmail" class="form-input" required placeholder="admin@exemplo.com">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Nova Palavra-passe</label>
+                <input type="password" id="masterPass" class="form-input" required placeholder="Mínimo 6 caracteres"
+                    minlength="6">
+            </div>
+            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">
+                Criar Conta Master ✅
+            </button>
+        </form>
+
+        <div id="masterMsg"></div>
+
+        <div style="margin-top:25px; border-top:1px solid #e2e8f0; padding-top:20px; text-align:center;">
+            <a href="admin.html"
+                style="font-size: 0.9rem; color: var(--color-primary); text-decoration: none; font-weight: 600;">
+                ← Voltar ao Painel de Login
+            </a>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('masterForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const msg = document.getElementById('masterMsg');
+            const nome = document.getElementById('masterNome').value;
+            const email = document.getElementById('masterEmail').value;
+            const pass = document.getElementById('masterPass').value;
+
+            msg.style.display = 'block';
+            msg.textContent = 'A processar... ⏳';
+            msg.style.background = '#eff6ff';
+            msg.style.color = '#1d4ed8';
+
+            try {
+                // Chamamos a função do firebase-config.js
+                // Passamos 'admin' como 4º argumento para garantir privilégios totais
+                await createAdminAccount(nome, email, pass, 'admin');
+
+                msg.textContent = '✅ Sucesso! Conta master criada. Já podes fazer login no painel.';
+                msg.style.background = '#dcfce7';
+                msg.style.color = '#15803d';
+                document.getElementById('masterForm').reset();
+            } catch (err) {
+                console.error(err);
+                msg.textContent = '❌ Erro: ' + err.message;
+                msg.style.background = '#fee2e2';
+                msg.style.color = '#b91c1c';
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -295,7 +295,7 @@ async function renderCartaz() {
                 <img src="${peca.imagem || 'placeholder.jpg'}" alt="${escapeHtmlSite(peca.nome)}" class="cartaz-poster" onerror="this.src='placeholder.jpg'">
                 <div class="cartaz-info">
                     <h2>${escapeHtmlSite(peca.nome)}</h2>
-                    <p>${escapeHtmlSite(peca.sinopse || '')}</p>
+                    <p>${escapeHtmlWithBr(peca.sinopse || '')}</p>
                     <div style="margin-top: 20px;">
                         <a href="peca.html?id=${peca.id}" class="btn btn--primary">Ver Detalhes</a>
                     </div>
@@ -446,7 +446,7 @@ async function renderPecaDetalhes() {
                 <main class="peca-main">
                     <div class="glass-card peca-description-card">
                         <h2 class="peca-subtitle">Sinopse</h2>
-                        <p class="peca-sinopse">${escapeHtmlSite(peca.sinopse || 'Sem sinopse disponível.')}</p>
+                        <p class="peca-sinopse">${escapeHtmlWithBr(peca.sinopse || 'Sem sinopse disponível.')}</p>
                     </div>
 
                     <!-- Sessões Grid -->
@@ -647,9 +647,9 @@ async function renderMembroDetalhes() {
                     <p class="profile__name" style="font-size:2rem; font-weight:800; color:var(--primary); margin-bottom:5px;">${escapeHtmlSite(membro.nome)}</p>
                     <p class="member-card__role" style="margin-bottom:20px; text-align:left;">${escapeHtmlSite(membro.funcao || 'Colaborador')}</p>
                     
-                    <div style="background:#f8fafc; padding:25px; border-radius:8px; border-left:4px solid var(--primary); margin-bottom:30px;">
+                    <div class="glass-card" style="padding:25px; border-left:4px solid var(--primary); margin-bottom:30px;">
                         <h3 style="font-size:0.9rem; text-transform:uppercase; color:var(--text-light); margin-bottom:10px; letter-spacing:1px;">Biografia</h3>
-                        <p style="font-size:1.1rem; line-height:1.7; color:var(--text);">${escapeHtmlSite(membro.bio || 'Este membro ainda não forneceu uma biografiam detalhada.')}</p>
+                        <p style="font-size:1.1rem; line-height:1.7; color:var(--text);">${escapeHtmlSite(membro.bio || 'Este membro ainda não forneceu uma biografia detalhada.')}</p>
                     </div>
 
                     ${participacoes.length > 0 ? `
@@ -658,14 +658,14 @@ async function renderMembroDetalhes() {
                             ${participacoes.map(p => {
             const peca = pecas.find(pc => pc.id === p.pecaId);
             return `
-                                    <div style="padding: 15px; background: white; border: 1px solid #e2e8f0; border-radius: 8px; display:flex; justify-content:space-between; align-items:center;">
+                                    <div class="glass-card" style="padding: 15px; margin-bottom: 0; display:flex; justify-content:space-between; align-items:center;">
                                         <div>
                                             <span style="color:var(--text-light); font-size:0.8rem; text-transform:uppercase; font-weight:600;">Peça</span>
-                                            <h4 style="margin:2px 0;">${peca ? `<a href="peca.html?id=${peca.id}" style="color:var(--primary);">${escapeHtmlSite(peca.nome)}</a>` : 'Peça Anterior'}</h4>
+                                            <h4 style="margin:2px 0;">${peca ? `<a href="peca.html?id=${peca.id}" style="color:var(--accent); font-weight:700;">${escapeHtmlSite(peca.nome)}</a>` : 'Peça Anterior'}</h4>
                                         </div>
                                         <div style="text-align:right;">
                                             <span style="color:var(--text-light); font-size:0.8rem; text-transform:uppercase; font-weight:600;">Papel</span>
-                                            <p style="margin:2px 0; color:var(--accent); font-weight:700;">${escapeHtmlSite(p.funcao || 'Equipa')}</p>
+                                            <p style="margin:2px 0; color:var(--text); font-weight:700;">${escapeHtmlSite(p.funcao || 'Equipa')}</p>
                                         </div>
                                     </div>`;
         }).join('')}
@@ -692,6 +692,14 @@ function escapeHtmlSite(text) {
     const div = document.createElement('div');
     div.textContent = text;
     return div.innerHTML;
+}
+
+function escapeHtmlWithBr(text) {
+    if (!text) return '';
+    // Primeiro escapa tudo para segurança
+    let escaped = escapeHtmlSite(text);
+    // Depois volta a converter &lt;br&gt; ou &lt;br/&gt; em tags reais
+    return escaped.replace(/&lt;br\s*\/?&gt;/gi, '<br>');
 }
 
 // Atualiza copyright automaticamente
