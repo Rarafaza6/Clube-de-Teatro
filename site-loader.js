@@ -929,6 +929,11 @@ function renderBookingUI(container, adminMode) {
                 <div class="cast-badge" style="background: linear-gradient(135deg, #0369a1 0%, #0284c7 100%);">
                     🏫 <strong>Turma ${escapeHtmlSite(currentTokenData.turma)}</strong>
                     <div class="quota-info">Podem ser reservados até ${currentTokenData.quotaRestante} lugar(es) gratuito(s)</div>
+                    ${window.currentSiteConfig?.msgDTS ? `
+                        <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.2); font-size: 0.95rem; font-weight: 500;">
+                            📢 ${escapeHtmlSite(window.currentSiteConfig.msgDTS)}
+                        </div>
+                    ` : ''}
                 </div>
             `;
         } else {

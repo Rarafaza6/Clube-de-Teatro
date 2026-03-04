@@ -1155,6 +1155,9 @@ async function loadConfig() {
         const taxaPOSEl = document.getElementById('configTaxaPOS');
         if (taxaPOSEl) taxaPOSEl.value = config.taxaPOS || '0.00';
 
+        const msgDTSEl = document.getElementById('configMsgDTS');
+        if (msgDTSEl) msgDTSEl.value = config.msgDTS || '';
+
         // Carregar lista de admins
         loadAdmins();
 
@@ -1206,7 +1209,8 @@ async function handleSaveConfig(e) {
         email: document.getElementById('configEmail').value,
         horario: document.getElementById('configHorario').value,
         localPagamento: document.getElementById('configLocalPagamento')?.value || '',
-        taxaPOS: parseFloat(document.getElementById('configTaxaPOS')?.value) || 0
+        taxaPOS: parseFloat(document.getElementById('configTaxaPOS')?.value) || 0,
+        msgDTS: document.getElementById('configMsgDTS')?.value || ''
     };
 
     try {
