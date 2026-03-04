@@ -116,6 +116,7 @@ function setupEventListeners() {
 
     // Config form
     const configFormObj = document.getElementById('configForm');
+    console.log('[Admin] Config Form Encontrado:', !!configFormObj);
     if (configFormObj) configFormObj.addEventListener('submit', handleSaveConfig);
 
     // Participação form
@@ -1201,6 +1202,7 @@ async function importDefaultLayout() {
 window.importDefaultLayout = importDefaultLayout;
 
 async function handleSaveConfig(e) {
+    console.log('[Admin] handleSaveConfig disparado');
     e.preventDefault();
 
     const config = {
@@ -1215,9 +1217,17 @@ async function handleSaveConfig(e) {
 
     try {
         await updateConfig(config);
-        if (window.showToast) window.showToast('Configurações guardadas');
+        if (window.showToast) {
+            window.showToast('Configurações guardadas');
+        } else {
+            alert('Configurações guardadas (sem Toast)');
+        }
     } catch (error) {
-        if (window.showToast) window.showToast('Erro ao guardar configurações', 'error');
+        if (window.showToast) {
+            window.showToast('Erro ao guardar configurações', 'error');
+        } else {
+            alert('Erro ao guardar: ' + error.message);
+        }
         console.error(error);
     }
 }
