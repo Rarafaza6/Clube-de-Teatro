@@ -834,6 +834,16 @@ async function renderBilhetes() {
     const token = urlParams.get('token');
     const adminMode = urlParams.get('mode') === 'admin';
 
+    // Debug help for GitHub environment
+    console.log('[Bilhetes] Config Disponível:', !!window.currentSiteConfig);
+    if (window.currentSiteConfig) console.log('[Bilhetes] Msg DTS:', window.currentSiteConfig.msgDTS);
+
+    // Safety fallback: if config not loaded yet, try to load it once more
+    if (!window.currentSiteConfig || Object.keys(window.currentSiteConfig).length === 0) {
+        console.warn('[Bilhetes] Config not found in window, loading manually...');
+        window.currentSiteConfig = await loadSiteConfig();
+    }
+
     if (!pecaId) {
         container.innerHTML = '<div class="error-state" style="text-align:center; padding:50px;"><h3>Peça não especificada</h3><a href="index.html" class="btn btn--primary">Voltar</a></div>';
         return;
@@ -859,8 +869,11 @@ async function renderBilhetes() {
 
         // Validar token se existir
         if (token) {
+            console.log('[Bilhetes] Validando token:', token);
             currentTokenData = await validateCastToken(token);
+            console.log('[Bilhetes] Resultado Token:', currentTokenData);
             if (!currentTokenData.valid) {
+                console.warn('[Bilhetes] Token inválido:', currentTokenData.error);
                 currentTokenData = null;
             }
         }
