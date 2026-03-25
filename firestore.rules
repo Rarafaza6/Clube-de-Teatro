@@ -1,0 +1,64 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // --- HELPER FUNCTIONS ---
+    
+    // Checks if the user is authenticated
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    // Checks if the user email is in the 'admins' collection
+    function isAdmin() {
+      return isSignedIn() && exists(/databases/$(database)/documents/admins/$(request.auth.token.email));
+    }
+    
+    // Checks if it is the initial setup (no admins yet or setup flag is false)
+    function isInitialSetup() {
+      return !get(/databases/$(database)/documents/config/site).data.admins_setup;
+    }
+
+    // --- RULES BY COLLECTION ---
+
+    // Plays, Members, participations (Publicly readable, admin writable)
+    match /pecas/{pecaId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    
+    match /membros/{membroId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    
+    match /participacoes/{partId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Configuration (Publicly readable, writable by admin or during initial setup)
+    match /config/site {
+      allow read: if true;
+      allow write: if isAdmin() || isInitialSetup();
+    }
+
+    // Admins (Readable by self or admin, writable by admin or during initial setup)
+    match /admins/{email} {
+      allow read: if isAdmin() || (isSignedIn() && request.auth.token.email == email);
+      allow write: if isAdmin() || isInitialSetup();
+    }
+
+    // Reservations (Publicly creatable, admin manageable)
+    match /reservas/{reservaId} {
+      allow create: if true;
+      allow read, update, delete: if isAdmin();
+    }
+    
+    // Cast/Class Tokens (Publicly readable for validation, admin writable)
+    match /tokensElenco/{tokenId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+  }
+}

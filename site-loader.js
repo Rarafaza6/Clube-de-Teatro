@@ -1208,7 +1208,11 @@ async function submitReserva(e, adminMode = false) {
         }
 
         // Gerar PDF para todos (Já não há Stripe redirecionamento)
-        await generateTicketPDF(reservasFeitas, nome, currentPecaData);
+        try {
+            await generateTicketPDF(reservasFeitas, nome, currentPecaData);
+        } catch (pdfErr) {
+            console.error('Erro na geração do PDF:', pdfErr);
+        }
         let message = '';
         if (!adminMode && !currentTokenData) {
             if (currentPecaData.pecaPaga && currentPecaData.preco) {
@@ -1340,10 +1344,21 @@ async function generateTicketPDF(reservas, nome, peca) {
                 colorDark: "#000000", colorLight: "#ffffff",
                 correctLevel: QRCode.CorrectLevel.H
             });
-            await new Promise(res => setTimeout(res, 80));
-            const qrImg = qrDiv.querySelector('img');
-            if (qrImg) {
-                doc.addImage(qrImg.src, 'PNG', w / 2 - 22, 83, 44, 44);
+            await new Promise(res => setTimeout(res, 150));
+            try {
+                const qrCanvas = qrDiv.querySelector('canvas');
+                const qrImg = qrDiv.querySelector('img');
+                let qrData = null;
+                if (qrCanvas) {
+                    qrData = qrCanvas.toDataURL('image/png');
+                } else if (qrImg && qrImg.src && qrImg.src.startsWith('data:image/')) {
+                    qrData = qrImg.src;
+                }
+                if (qrData && qrData.length > 100) {
+                    doc.addImage(qrData, 'PNG', w / 2 - 22, 83, 44, 44);
+                }
+            } catch (err) {
+                console.error('QR Generate Error:', err);
             }
         }
 
@@ -1410,10 +1425,21 @@ async function generateTicketPDF(reservas, nome, peca) {
                     colorDark: "#000000", colorLight: "#ffffff",
                     correctLevel: QRCode.CorrectLevel.H
                 });
-                await new Promise(res => setTimeout(res, 80));
-                const qrImg = qrDiv.querySelector('img');
-                if (qrImg) {
-                    doc.addImage(qrImg.src, 'PNG', w / 2 - 22, 83, 44, 44);
+                await new Promise(res => setTimeout(res, 150));
+                try {
+                    const qrCanvas = qrDiv.querySelector('canvas');
+                    const qrImg = qrDiv.querySelector('img');
+                    let qrData = null;
+                    if (qrCanvas) {
+                        qrData = qrCanvas.toDataURL('image/png');
+                    } else if (qrImg && qrImg.src && qrImg.src.startsWith('data:image/')) {
+                        qrData = qrImg.src;
+                    }
+                    if (qrData && qrData.length > 100) {
+                        doc.addImage(qrData, 'PNG', w / 2 - 22, 83, 44, 44);
+                    }
+                } catch (err) {
+                    console.error('QR Generate Error:', err);
                 }
             }
 
