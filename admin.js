@@ -340,8 +340,10 @@ async function loadDashboardStats() {
         const pecas = await getPecas();
         const membros = await getMembros();
 
-        document.getElementById('totalPecas').textContent = pecas.length;
-        document.getElementById('totalMembros').textContent = membros.length;
+        const totalPecasEl = document.getElementById('totalPecas');
+        const totalMembrosEl = document.getElementById('totalMembros');
+        if (totalPecasEl) totalPecasEl.textContent = pecas.length;
+        if (totalMembrosEl) totalMembrosEl.textContent = membros.length;
 
         // Reservas stats (async, non-blocking)
         db.collection('reservas').get().then(snap => {
@@ -367,16 +369,18 @@ async function loadDashboardStats() {
         const statusDesc = document.getElementById('statusDescription');
         const widget = document.getElementById('liveStatusWidget');
 
-        if (pecaEmCartaz) {
-            statusLabel.textContent = "Em Temporada 🎭";
-            statusLabel.style.color = "#10b981";
-            statusDesc.innerHTML = `Neste momento, a peça <strong>"${escapeHtml(pecaEmCartaz.nome)}"</strong> está em destaque na página inicial.`;
-            widget.style.borderLeft = "5px solid #10b981";
-        } else {
-            statusLabel.textContent = "Sem Peça em Cartaz ⚠️";
-            statusLabel.style.color = "#f59e0b";
-            statusDesc.textContent = "O site não está a mostrar nenhuma peça principal. Vai ao menu 'Peças' e marca uma como 'Em Cartaz'.";
-            widget.style.borderLeft = "5px solid #f59e0b";
+        if (statusLabel && statusDesc && widget) {
+            if (pecaEmCartaz) {
+                statusLabel.textContent = "Em Temporada 🎭";
+                statusLabel.style.color = "#10b981";
+                statusDesc.innerHTML = `Neste momento, a peça <strong>"${escapeHtml(pecaEmCartaz.nome)}"</strong> está em destaque na página inicial.`;
+                widget.style.borderLeft = "5px solid #10b981";
+            } else {
+                statusLabel.textContent = "Sem Peça em Cartaz ⚠️";
+                statusLabel.style.color = "#f59e0b";
+                statusDesc.textContent = "O site não está a mostrar nenhuma peça principal. Vai ao menu 'Peças' e marca uma como 'Em Cartaz'.";
+                widget.style.borderLeft = "5px solid #f59e0b";
+            }
         }
 
     } catch (error) {
@@ -2356,6 +2360,8 @@ window.exportReservasExcel = () => {
 
         // 3. WORKBOOK ASSEMBLY
         const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, wsDashboard, "Dashboard");
+        XLSX.utils.book_append_sheet(wb, wsData, "Reservas");
         XLSX.writeFile(wb, `Reservas_Teatro_${new Date().toISOString().split('T')[0]}.xlsx`);
     }
 };
