@@ -1915,6 +1915,10 @@ async function showAllReservations() {
                 </select>
                 <button onclick="resetReservaFilters()" class="btn btn-outline" style="border-radius: 10px; font-size: 0.85rem; padding: 10px;">🔄 Limpar</button>
             </div>
+            <div style="grid-column: 1 / -1; display: flex; align-items: center; gap: 10px; padding-top: 15px; border-top: 1px solid #f1f5f9; margin-top: 10px;">
+                <input type="checkbox" id="selectAllVisible" onchange="selectAllVisibleReservations(this.checked)" style="width: 18px; height: 18px; cursor: pointer;">
+                <label for="selectAllVisible" style="font-weight: 700; color: #1e293b; cursor: pointer; font-size: 0.9rem;">Selecionar todos os bilhetes filtrados</label>
+            </div>
         </div>
 
         <div id="reservasHierarchicalList">
@@ -1990,15 +1994,21 @@ function renderHierarchicalReservations() {
     const pecasMap = {};
     filtered.forEach(r => {
         if (!pecasMap[r.pecaId]) {
-            const p = allPecas.find(x => x.id === r.pecaId) || { nome: 'Peça Desconhecida', sessoes: [] };
-            pecasMap[r.pecaId] = { ...p, sessions: {} };
+            const p = allPecas.find(x => x.id === r.pecaId) || { id: r.pecaId, nome: 'Peça Desconhecida', sessoes: [] };
+            pecasMap[r.pecaId] = { ...p, id: r.pecaId, sessions: {} };
         }
         if (!pecasMap[r.pecaId].sessions[r.sessaoId]) {
-            const s = (pecasMap[r.pecaId].sessoes || []).find(x => x.id === r.sessaoId) || { data: null, local: 'Local indisp.' };
-            pecasMap[r.pecaId].sessions[r.sessaoId] = { ...s, items: [] };
+            const s = (pecasMap[r.pecaId].sessoes || []).find(x => x.id === r.sessaoId) || { id: r.sessaoId, data: null, local: 'Local indisp.' };
+            pecasMap[r.pecaId].sessions[r.sessaoId] = { ...s, id: r.sessaoId, items: [] };
         }
         pecasMap[r.pecaId].sessions[r.sessaoId].items.push(r);
     });
+
+    // Update the master "Select All" checkbox state
+    const masterCheckbox = document.getElementById('selectAllVisible');
+    if (masterCheckbox) {
+        masterCheckbox.checked = filtered.length > 0 && filtered.every(r => selectedReservas.has(r.id));
+    }
 
     let html = '';
     Object.values(pecasMap).forEach(peca => {
@@ -2018,6 +2028,9 @@ function renderHierarchicalReservations() {
             const totalTickets = sessao.items.length;
             const checkins = sessao.items.filter(x => x.entradaValidada).length;
             const pending = sessao.items.filter(x => x.pagamentoStatus === 'pendente' && !isReservaExpirada(x)).length;
+            
+            // Check if all items in this session are selected
+            const isSessaoSelected = sessao.items.length > 0 && sessao.items.every(r => selectedReservas.has(r.id));
 
             html += `
                 <div class="sessao-card" style="background:white; border-radius:15px; border:1px solid #e2e8f0; box-shadow:0 4px 6px -1px rgba(0,0,0,0.05); margin-bottom:20px; overflow:hidden;">
@@ -2049,7 +2062,7 @@ function renderHierarchicalReservations() {
                             <thead>
                                 <tr style="background:#fff; color:#1e293b;">
                                     <th style="width:40px; text-align:center;">
-                                        <input type="checkbox" onchange="toggleSelectSessao('${peca.id}', '${sessao.id}', this.checked)" style="cursor:pointer; width:18px; height:18px;">
+                                        <input type="checkbox" onchange="toggleSelectSessao('${peca.id}', '${sessao.id}', this.checked)" ${isSessaoSelected ? 'checked' : ''} style="cursor:pointer; width:18px; height:18px;">
                                     </th>
                                     <th style="color:#1e293b;">Código</th>
                                     <th style="color:#1e293b;">Visitante</th>
@@ -2147,7 +2160,8 @@ function toggleReservaSelection(id, isSelected) {
 }
 
 function toggleSelectSessao(pecaId, sessaoId, isSelected) {
-    const list = allReservasGlobal.filter(r => r.pecaId === pecaId && r.sessaoId === sessaoId);
+    const filteredVisible = window.getFilteredReservations();
+    const list = filteredVisible.filter(r => r.pecaId === pecaId && r.sessaoId === sessaoId);
     list.forEach(r => {
         if (isSelected) selectedReservas.add(r.id);
         else selectedReservas.delete(r.id);
@@ -2158,9 +2172,22 @@ function toggleSelectSessao(pecaId, sessaoId, isSelected) {
 
 function clearSelection() {
     selectedReservas.clear();
+    const masterCheckbox = document.getElementById('selectAllVisible');
+    if (masterCheckbox) masterCheckbox.checked = false;
     updateBulkToolbar();
     renderHierarchicalReservations();
 }
+
+function selectAllVisibleReservations(isSelected) {
+    const filtered = window.getFilteredReservations();
+    filtered.forEach(r => {
+        if (isSelected) selectedReservas.add(r.id);
+        else selectedReservas.delete(r.id);
+    });
+    updateBulkToolbar();
+    renderHierarchicalReservations();
+}
+window.selectAllVisibleReservations = selectAllVisibleReservations;
 
 function updateBulkToolbar() {
     const toolbar = document.getElementById('bulkActionsToolbar');
@@ -2253,6 +2280,15 @@ window.exportReservasExcel = () => {
     if (typeof XLSX === 'undefined') {
         alert('A carregar biblioteca de exportação... Tenta novamente em segundos.');
         return;
+    }
+
+    // 1. Check if there are tickets selected
+    if (selectedReservas.size > 0) {
+        if (confirm(`Desejas exportar apenas os ${selectedReservas.size} bilhetes SELECIONADOS? (Se cancelares, verificar-se-ão os filtros)`)) {
+            const selectedData = [...selectedReservas].map(id => allReservasGlobal.find(r => r.id === id)).filter(r => r);
+            generateExcel(selectedData);
+            return;
+        }
     }
 
     const filteredReservas = window.getFilteredReservations();
